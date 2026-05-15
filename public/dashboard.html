@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Panini Vendas</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23ffd400'/%3E%3Ctext x='16' y='22' font-size='16' font-weight='900' text-anchor='middle' fill='%23a3000c' font-family='system-ui'%3EP%3C/text%3E%3C/svg%3E" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f5f7fb; color: #1a1a1a; -webkit-font-smoothing: antialiased;
+    }
+    .topbar {
+      background: #1f2540; color: #fff; padding: 14px 20px;
+      display: flex; align-items: center; gap: 14px;
+      box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    }
+    .topbar .logo {
+      background: #ffd400; color: #a3000c; font-style: italic; font-weight: 900;
+      padding: 4px 12px; border-radius: 4px; border: 2px solid #a3000c; font-size: 18px;
+    }
+    .topbar h1 { font-size: 18px; margin: 0; font-weight: 700; }
+    .topbar .spacer { flex: 1; }
+    .topbar select, .topbar button {
+      background: #2a3151; color: #fff; border: 1px solid #3b446e;
+      padding: 8px 12px; border-radius: 6px; font-size: 13px; cursor: pointer;
+    }
+    .topbar button.refresh { background: #ffd400; color: #1a1a1a; border-color: #ffd400; font-weight: 700; }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 24px 20px 40px; }
+
+    .gate {
+      max-width: 420px; margin: 100px auto; background: #fff; border-radius: 10px;
+      padding: 28px; box-shadow: 0 4px 20px rgba(0,0,0,.08); text-align: center;
+    }
+    .gate h2 { margin: 0 0 8px; }
+    .gate p { color: #555; margin: 0 0 18px; font-size: 14px; }
+    .gate input {
+      width: 100%; padding: 12px; border: 1px solid #d0d0d0; border-radius: 6px;
+      font-size: 14px; margin-bottom: 12px;
+    }
+    .gate button {
+      width: 100%; background: #1f2540; color: #fff; border: 0; border-radius: 6px;
+      padding: 12px; font-size: 14px; font-weight: 700; cursor: pointer;
+    }
+
+    /* KPI cards */
+    .kpis {
+      display: grid; gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      margin-bottom: 20px;
+    }
+    .kpi {
+      background: #fff; border-radius: 10px; padding: 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    }
+    .kpi .label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: .5px; font-weight: 700; }
+    .kpi .value { font-size: 28px; font-weight: 800; margin-top: 6px; line-height: 1; }
+    .kpi .sub   { font-size: 12px; color: #999; margin-top: 4px; }
+    .kpi.green .value { color: #16a34a; }
+    .kpi.blue  .value { color: #2563eb; }
+    .kpi.orange .value { color: #ea580c; }
+    .kpi.purple .value { color: #7c3aed; }
+
+    /* Cards */
+    .grid {
+      display: grid; gap: 16px;
+      grid-template-columns: 1fr;
+      margin-bottom: 20px;
+    }
+    @media (min-width: 900px) {
+      .grid.two   { grid-template-columns: 2fr 1fr; }
+      .grid.three { grid-template-columns: 1fr 1fr 1fr; }
+    }
+    .card {
+      background: #fff; border-radius: 10px; padding: 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    }
+    .card h3 { margin: 0 0 12px; font-size: 15px; }
+    .card .chart-wrap { height: 280px; position: relative; }
+
+    /* Funnel */
+    .funnel-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .funnel-label { width: 170px; font-size: 13px; color: #555; }
+    .funnel-bar-wrap { flex: 1; height: 22px; background: #f0f2f7; border-radius: 4px; overflow: hidden; }
+    .funnel-bar {
+      height: 100%; background: linear-gradient(90deg, #2563eb, #16a34a);
+      display: flex; align-items: center; padding: 0 8px;
+      color: #fff; font-size: 12px; font-weight: 700; min-width: 40px;
+      transition: width .6s cubic-bezier(.4,0,.2,1);
+    }
+    .funnel-num { min-width: 60px; text-align: right; font-weight: 700; font-size: 13px; }
+
+    /* UTM tables */
+    .utm-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .utm-table th, .utm-table td { text-align: left; padding: 8px 6px; border-bottom: 1px solid #f0f0f0; }
+    .utm-table th { font-weight: 700; color: #666; text-transform: uppercase; font-size: 11px; letter-spacing: .5px; }
+    .utm-table td.num { text-align: right; font-weight: 700; }
+    .utm-table tr:last-child td { border-bottom: 0; }
+
+    /* Orders table */
+    .orders-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .orders-table th, .orders-table td { text-align: left; padding: 10px 8px; border-bottom: 1px solid #f0f0f0; }
+    .orders-table th { font-weight: 700; color: #666; text-transform: uppercase; font-size: 11px; letter-spacing: .5px; }
+    .orders-table td.num { text-align: right; font-weight: 700; }
+    .badge {
+      display: inline-block; padding: 3px 8px; border-radius: 12px;
+      font-size: 11px; font-weight: 700;
+    }
+    .badge.PENDING   { background: #fff7ed; color: #c2410c; }
+    .badge.COMPLETED { background: #f0fdf4; color: #15803d; }
+    .badge.DECLINED  { background: #fef2f2; color: #b91c1c; }
+
+    .empty { color: #999; font-size: 13px; padding: 12px 0; text-align: center; }
+    .footer-note { color: #999; font-size: 12px; text-align: center; margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+<!-- ====== GATE (token) ====== -->
+<div id="gate" class="gate" style="display:none;">
+  <h2>Dashboard Panini</h2>
+  <p>Introduz o token de admin para entrar.</p>
+  <input id="tokenInput" type="password" placeholder="ADMIN_TOKEN" />
+  <button id="btnEnter">Entrar</button>
+</div>
+
+<!-- ====== APP ====== -->
+<div id="app" style="display:none;">
+  <header class="topbar">
+    <span class="logo">PANINI</span>
+    <h1>Dashboard de vendas & tracking</h1>
+    <span class="spacer"></span>
+    <select id="rangeSelect">
+      <option value="1">Hoje</option>
+      <option value="7" selected>Últimos 7 dias</option>
+      <option value="30">Últimos 30 dias</option>
+      <option value="90">Últimos 90 dias</option>
+    </select>
+    <button class="refresh" id="btnRefresh">↻ Atualizar</button>
+    <button id="btnLogout">Sair</button>
+  </header>
+
+  <main class="container">
+
+    <!-- KPIs -->
+    <div class="kpis">
+      <div class="kpi blue">
+        <div class="label">Visitas</div>
+        <div class="value" id="kVisits">—</div>
+        <div class="sub" id="kVisitsSub">—</div>
+      </div>
+      <div class="kpi purple">
+        <div class="label">Visitantes únicos</div>
+        <div class="value" id="kUnique">—</div>
+        <div class="sub">por visitorId</div>
+      </div>
+      <div class="kpi orange">
+        <div class="label">Checkouts iniciados</div>
+        <div class="value" id="kCheckouts">—</div>
+        <div class="sub" id="kCheckoutsSub">taxa de conversão</div>
+      </div>
+      <div class="kpi green">
+        <div class="label">Receita confirmada</div>
+        <div class="value" id="kRevenue">—</div>
+        <div class="sub">apenas pedidos COMPLETED</div>
+      </div>
+    </div>
+
+    <!-- série temporal + funnel -->
+    <div class="grid two">
+      <div class="card">
+        <h3>Visitas vs. Checkouts iniciados</h3>
+        <div class="chart-wrap"><canvas id="chartTimeline"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Funil de conversão</h3>
+        <div id="funnel"></div>
+      </div>
+    </div>
+
+    <!-- UTM breakdown -->
+    <div class="grid three">
+      <div class="card">
+        <h3>UTM Source</h3>
+        <table class="utm-table" id="tblSource">
+          <thead><tr><th>Source</th><th class="num">Visitas</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h3>UTM Medium</h3>
+        <table class="utm-table" id="tblMedium">
+          <thead><tr><th>Medium</th><th class="num">Visitas</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h3>UTM Campaign</h3>
+        <table class="utm-table" id="tblCampaign">
+          <thead><tr><th>Campaign</th><th class="num">Visitas</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- referrers + status -->
+    <div class="grid two">
+      <div class="card">
+        <h3>Top referrers</h3>
+        <table class="utm-table" id="tblReferrers">
+          <thead><tr><th>Origem</th><th class="num">Visitas</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Pedidos por status</h3>
+        <div class="chart-wrap" style="height:240px;"><canvas id="chartStatus"></canvas></div>
+      </div>
+    </div>
+
+    <!-- orders -->
+    <div class="card">
+      <h3>Últimos pedidos</h3>
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>Data</th><th>Cliente</th><th>Método</th><th>Status</th>
+            <th>UTM source</th><th>Campaign</th><th class="num">Valor</th>
+          </tr>
+        </thead>
+        <tbody id="tblOrders"></tbody>
+      </table>
+    </div>
+
+    <p class="footer-note">Dashboard servida localmente · dados em <code>data/visits.json</code> e <code>data/transactions.json</code></p>
+  </main>
+</div>
+
+<script>
+  // Token gate
+  const TOKEN_KEY = 'panini_admin_token';
+  let token = localStorage.getItem(TOKEN_KEY) || new URLSearchParams(location.search).get('token');
+
+  function showGate() {
+    document.getElementById('gate').style.display = 'block';
+    document.getElementById('app').style.display = 'none';
+  }
+  function showApp() {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+  }
+  document.getElementById('btnEnter').addEventListener('click', () => {
+    const v = document.getElementById('tokenInput').value.trim();
+    if (!v) return;
+    token = v;
+    localStorage.setItem(TOKEN_KEY, v);
+    bootstrap();
+  });
+  document.getElementById('btnLogout').addEventListener('click', () => {
+    localStorage.removeItem(TOKEN_KEY); token = null; showGate();
+  });
+
+  // Helpers
+  function fmtEUR(v) { return new Intl.NumberFormat('pt-PT', { style:'currency', currency:'EUR' }).format(v); }
+  function fmtPct(num, denom) { if (!denom) return '0%'; return ((num/denom)*100).toFixed(1) + '%'; }
+  function fmtDateTime(ts) {
+    return new Date(ts).toLocaleString('pt-PT', { dateStyle: 'short', timeStyle: 'short' });
+  }
+
+  let chartTimeline = null;
+  let chartStatus = null;
+
+  async function fetchDashboard(rangeDays) {
+    const to = Date.now();
+    const from = to - rangeDays * 24 * 60 * 60 * 1000;
+    const r = await fetch(`/api/admin/dashboard?from=${from}&to=${to}`, {
+      headers: { 'x-admin-token': token },
+    });
+    if (r.status === 401 || r.status === 404) { showGate(); throw new Error('unauthorized'); }
+    return r.json();
+  }
+
+  function renderKpis(d) {
+    document.getElementById('kVisits').textContent   = d.totals.visits.toLocaleString('pt-PT');
+    document.getElementById('kVisitsSub').textContent = d.totals.uniqueVisitors + ' únicos';
+    document.getElementById('kUnique').textContent   = d.totals.uniqueVisitors.toLocaleString('pt-PT');
+    document.getElementById('kCheckouts').textContent = d.totals.checkoutStarted.toLocaleString('pt-PT');
+    document.getElementById('kCheckoutsSub').textContent = 'taxa: ' + fmtPct(d.totals.checkoutStarted, d.totals.visits);
+    document.getElementById('kRevenue').textContent  = fmtEUR(d.revenue.total || 0);
+  }
+
+  function renderTimeline(d) {
+    const labels = d.series.map(s => s.date);
+    const visits = d.series.map(s => s.visits);
+    const checkouts = d.series.map(s => s.checkouts);
+    if (chartTimeline) chartTimeline.destroy();
+    chartTimeline = new Chart(document.getElementById('chartTimeline'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          { label: 'Visitas', data: visits, borderColor: '#2563eb', backgroundColor: '#2563eb22', fill: true, tension: .35, borderWidth: 2 },
+          { label: 'Checkouts iniciados', data: checkouts, borderColor: '#ea580c', backgroundColor: '#ea580c22', fill: true, tension: .35, borderWidth: 2 },
+        ],
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' } },
+        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
+      },
+    });
+  }
+
+  function renderFunnel(d) {
+    const max = Math.max(...d.funnel.map(f => f.count), 1);
+    const html = d.funnel.map(f => `
+      <div class="funnel-row">
+        <div class="funnel-label">${f.stage}</div>
+        <div class="funnel-bar-wrap">
+          <div class="funnel-bar" style="width:${(f.count/max)*100}%">${f.count}</div>
+        </div>
+        <div class="funnel-num">${fmtPct(f.count, max)}</div>
+      </div>
+    `).join('');
+    document.getElementById('funnel').innerHTML = html;
+  }
+
+  function renderUtmTable(elId, rows) {
+    const tb = document.querySelector('#' + elId + ' tbody');
+    if (!rows.length) { tb.innerHTML = '<tr><td colspan="2" class="empty">Sem dados</td></tr>'; return; }
+    tb.innerHTML = rows.map(r => `<tr><td>${escapeHtml(r.key)}</td><td class="num">${r.count}</td></tr>`).join('');
+  }
+
+  function renderStatusChart(d) {
+    const stats = (d.statsByStatus || []).filter(s => s && s.status);
+    const labels = stats.map(s => s.status);
+    const counts = stats.map(s => s.count);
+    const colors = labels.map(l => l === 'COMPLETED' ? '#16a34a' : l === 'DECLINED' ? '#b91c1c' : '#f59e0b');
+    if (chartStatus) chartStatus.destroy();
+    if (!labels.length) {
+      const ctx = document.getElementById('chartStatus').getContext('2d');
+      ctx.clearRect(0,0,1000,1000);
+      return;
+    }
+    chartStatus = new Chart(document.getElementById('chartStatus'), {
+      type: 'doughnut',
+      data: { labels, datasets: [{ data: counts, backgroundColor: colors }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } },
+    });
+  }
+
+  function renderOrders(d) {
+    const tb = document.getElementById('tblOrders');
+    const orders = d.orders || [];
+    if (!orders.length) { tb.innerHTML = '<tr><td colspan="7" class="empty">Sem pedidos</td></tr>'; return; }
+    tb.innerHTML = orders.map(o => `
+      <tr>
+        <td>${fmtDateTime(o.created_at)}</td>
+        <td>${escapeHtml(o.payer_name || '—')}<br><small style="color:#999">${escapeHtml(o.payer_email || '')}</small></td>
+        <td>${escapeHtml(o.method || '')}</td>
+        <td><span class="badge ${o.status}">${o.status}</span></td>
+        <td>${escapeHtml(o.utm_source || '—')}</td>
+        <td>${escapeHtml(o.utm_campaign || '—')}</td>
+        <td class="num">${fmtEUR(o.amount || 0)}</td>
+      </tr>
+    `).join('');
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  async function reload() {
+    const days = Number(document.getElementById('rangeSelect').value);
+    try {
+      const d = await fetchDashboard(days);
+      renderKpis(d);
+      renderTimeline(d);
+      renderFunnel(d);
+      renderUtmTable('tblSource',    d.utm.source);
+      renderUtmTable('tblMedium',    d.utm.medium);
+      renderUtmTable('tblCampaign',  d.utm.campaign);
+      renderUtmTable('tblReferrers', d.referrers);
+      renderStatusChart(d);
+      renderOrders(d);
+    } catch (e) { /* silent */ }
+  }
+
+  document.getElementById('btnRefresh').addEventListener('click', reload);
+  document.getElementById('rangeSelect').addEventListener('change', reload);
+
+  function bootstrap() {
+    if (!token) { showGate(); return; }
+    showApp();
+    reload();
+    // auto-refresh a cada 30s
+    setInterval(reload, 30_000);
+  }
+  bootstrap();
+</script>
+
+</body>
+</html>

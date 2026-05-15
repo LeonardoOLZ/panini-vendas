@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — Panini</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23ffd400'/%3E%3Ctext x='16' y='22' font-size='16' font-weight='900' text-anchor='middle' fill='%23a3000c' font-family='system-ui'%3EP%3C/text%3E%3C/svg%3E" />
+
+<!-- Meta Pixel -->
+<script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1485033180084660');
+  fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1485033180084660&ev=PageView&noscript=1"/></noscript>
+
+</head>
+<body class="checkout-body">
+
+<header class="ck-banner">
+  <div class="ck-logo" aria-label="Panini">
+    <span class="star">★</span><span class="word">PANINI</span>
+  </div>
+  <div class="ck-timer">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#ffd400" stroke-width="2">
+      <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+    </svg>
+    <span>Oferta expira em </span>
+    <strong id="countdown">09:59</strong>
+  </div>
+  <div class="ck-pills">
+    <span class="ck-pill"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/></svg> <span id="livePeople">30</span> a comprar agora</span>
+    <span class="ck-pill"><svg viewBox="0 0 24 24"><path d="M3 7h18l-2 13H5z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg> <span id="liveSold">107</span> vendidos hoje</span>
+  </div>
+</header>
+
+<div class="ck-trust">
+  <div class="ck-trust-row">
+    <span>✓ Ambiente 100% seguro</span>
+    <span>✓ Compra protegida</span>
+  </div>
+  <div class="ck-trust-row">
+    <span>✓ Portes grátis Portugal</span>
+    <span>✓ Produto original</span>
+  </div>
+</div>
+
+<div class="app">
+
+  <ol class="step-indicator" id="stepIndicator">
+    <li class="step active" data-step="1"><span class="step-num">1</span><span class="step-label">Sacola</span></li>
+    <li class="step" data-step="2"><span class="step-num">2</span><span class="step-label">Entrega</span></li>
+    <li class="step" data-step="3"><span class="step-num">3</span><span class="step-label">Pagamento</span></li>
+  </ol>
+
+  <section class="product-card">
+    <img class="product-thumb"
+         src="/images/produto.png"
+         onerror="this.onerror=null;this.src='/images/produto-placeholder.svg';"
+         alt="Produto Panini" />
+    <div class="product-info">
+      <div class="product-stars">★★★★★ <span>4,9 · +2.200 avaliações</span></div>
+      <div class="product-name" id="pName">Kit Básico</div>
+      <div class="product-detail" id="pDetail">1 Álbum + 10 saquetas</div>
+      <div class="product-price" id="cartTotal">€ 0,00</div>
+    </div>
+    <div class="ribbon">Promoção</div>
+  </section>
+
+  <!-- =========== STEP 1: dados =========== -->
+  <section class="screen active" id="screen-data">
+    <div class="step-card">
+      <h2 class="step-title">1 · Os teus dados</h2>
+
+      <div class="form-group" data-field="email">
+        <label>E-mail <span class="req">*</span></label>
+        <input type="email" id="fEmail" placeholder="nome@email.com" autocomplete="email" />
+        <div class="err"></div>
+      </div>
+
+      <div class="form-group" data-field="name">
+        <label>Nome completo <span class="req">*</span></label>
+        <input type="text" id="fName" placeholder="Nome e apelido" autocomplete="name" />
+        <div class="err"></div>
+      </div>
+
+      <div class="form-group" data-field="phone">
+        <label>Telemóvel <span class="req">*</span></label>
+        <input type="tel" id="fPhone" placeholder="9XX XXX XXX" inputmode="numeric" maxlength="9" />
+        <div class="hint">Usamos para entrega ou SMS da encomenda.</div>
+        <div class="err"></div>
+      </div>
+
+      <div class="form-group" data-field="nif">
+        <label>NIF <span class="req">*</span></label>
+        <input type="text" id="fNif" placeholder="9 dígitos" inputmode="numeric" maxlength="9" />
+        <div class="hint">Indica 9 números — não usamos verificação de dígito de controlo neste passo.</div>
+        <div class="err"></div>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="btnGoStep2">Continuar &rsaquo;</button>
+  </section>
+
+  <!-- =========== STEP 2: entrega =========== -->
+  <section class="screen" id="screen-shipping">
+    <div class="step-card">
+      <h2 class="step-title">Endereço de entrega</h2>
+      <div class="step-sub">Portes grátis para todo Portugal</div>
+
+      <div class="form-group" data-field="cp">
+        <label>Código postal <span class="req">*</span></label>
+        <input type="text" id="sCp" placeholder="0000-000" maxlength="8" />
+        <div class="err"></div>
+      </div>
+
+      <div class="form-group" data-field="street">
+        <label>Morada <span class="req">*</span></label>
+        <input type="text" id="sStreet" placeholder="Rua / Avenida" />
+        <div class="err"></div>
+      </div>
+
+      <div class="form-row-2">
+        <div class="form-group" data-field="num">
+          <label>Número <span class="req">*</span></label>
+          <input type="text" id="sNum" placeholder="123" />
+          <div class="err"></div>
+        </div>
+        <div class="form-group" data-field="floor">
+          <label>Andar / Fração</label>
+          <input type="text" id="sFloor" placeholder="2º Esq." />
+        </div>
+      </div>
+
+      <div class="form-group" data-field="city">
+        <label>Localidade <span class="req">*</span></label>
+        <input type="text" id="sCity" placeholder="Cidade" />
+        <div class="err"></div>
+      </div>
+
+      <div class="form-group" data-field="district">
+        <label>Distrito <span class="req">*</span></label>
+        <select id="sDistrict">
+          <option value="">Seleccione...</option>
+          <option>Aveiro</option><option>Beja</option><option>Braga</option>
+          <option>Bragança</option><option>Castelo Branco</option><option>Coimbra</option>
+          <option>Évora</option><option>Faro</option><option>Guarda</option>
+          <option>Leiria</option><option>Lisboa</option><option>Portalegre</option>
+          <option>Porto</option><option>Santarém</option><option>Setúbal</option>
+          <option>Viana do Castelo</option><option>Vila Real</option><option>Viseu</option>
+          <option>Açores</option><option>Madeira</option>
+        </select>
+        <div class="err"></div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-secondary" data-back="screen-data">VOLTAR</button>
+      <button class="btn-primary" id="btnGoStep3">Continuar &rsaquo;</button>
+    </div>
+  </section>
+
+  <!-- =========== STEP 3: pagamento + upsells =========== -->
+  <section class="screen" id="screen-payment">
+
+    <!-- Upsell -->
+    <div class="upsell-card">
+      <div class="upsell-title">Aproveita e leva mais saquetas com preço promocional</div>
+
+      <div class="upsell-item" data-id="u50" data-price="30">
+        <img class="upsell-thumb" src="/images/produto.png"
+             onerror="this.onerror=null;this.src='/images/produto-placeholder.svg';" alt="" />
+        <div class="upsell-info">
+          <div class="upsell-name">+50 saquetas · ~250 cromos</div>
+          <div class="upsell-desc">Desconto de pré-venda com portes grátis em Portugal.</div>
+          <div class="upsell-price"><span class="old">40,00 €</span> <span class="new">30,00 €</span></div>
+          <button class="upsell-btn" type="button">+ Adicionar ao pedido</button>
+        </div>
+      </div>
+
+      <div class="upsell-item" data-id="u100" data-price="55">
+        <img class="upsell-thumb" src="/images/produto.png"
+             onerror="this.onerror=null;this.src='/images/produto-placeholder.svg';" alt="" />
+        <div class="upsell-info">
+          <div class="upsell-name">+100 saquetas · ~500 cromos</div>
+          <span class="upsell-badge red">MAIS VENDIDO</span>
+          <div class="upsell-desc">O equilíbrio preferido dos colecionadores — pré-venda exclusiva.</div>
+          <div class="upsell-price"><span class="old">125,00 €</span> <span class="new">55,00 €</span></div>
+          <button class="upsell-btn" type="button">+ Adicionar ao pedido</button>
+        </div>
+      </div>
+
+      <div class="upsell-item" data-id="u250" data-price="100">
+        <img class="upsell-thumb" src="/images/produto.png"
+             onerror="this.onerror=null;this.src='/images/produto-placeholder.svg';" alt="" />
+        <div class="upsell-info">
+          <div class="upsell-name">+250 saquetas · ~1250 cromos</div>
+          <span class="upsell-badge yellow">ÚLTIMAS UNIDADES</span>
+          <div class="upsell-desc">Máximo desconto neste lote promocional.</div>
+          <div class="upsell-price"><span class="old">625,00 €</span> <span class="new">100,00 €</span></div>
+          <button class="upsell-btn" type="button">+ Adicionar ao pedido</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagamento -->
+    <div class="step-card">
+      <h2 class="step-title">Pagamento</h2>
+      <div class="step-sub">FORMA DE PAGAMENTO</div>
+
+      <div class="pay-list">
+        <div class="pay-method selected" data-method="mbway">
+          <div class="pay-radio"></div>
+          <div class="pay-body">
+            <div class="pay-head">
+              <span class="mbway-text">MB WAY <span class="red">MB WAY</span></span>
+            </div>
+            <div class="pay-desc">Aprovação imediata — pagas em segundos na app.</div>
+            <div class="pay-extra" id="mbwayExtra">
+              <label>Telemóvel para MB WAY <span class="req">*</span></label>
+              <input type="tel" id="mbwayPhone" placeholder="9XX XXX XXX" inputmode="numeric" maxlength="9" />
+            </div>
+          </div>
+        </div>
+
+        <div class="pay-method" data-method="multibanco">
+          <div class="pay-radio"></div>
+          <div class="pay-body">
+            <div class="pay-head">
+              <span class="mb-text">Multibanco</span>
+            </div>
+            <div class="pay-desc">Recebes entidade e referência para pagar em ATM ou homebanking.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-line"><span>Portes</span><span class="green-strong">Grátis</span></div>
+        <div class="summary-line"><span id="sumProductLabel">Subtotal kit</span><span id="sumSubtotal">€ 0,00</span></div>
+        <div id="sumUpsellsWrap"></div>
+        <div class="summary-line total"><span>Total</span><span id="sumTotal">€ 0,00</span></div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" data-back="screen-shipping">VOLTAR</button>
+        <button class="btn-primary" id="btnPay">Finalizar pedido &rsaquo;</button>
+      </div>
+    </div>
+
+    <div class="ck-foot">
+      <div class="ck-foot-line">Compra segura SSL · Garantia de 7 dias · Portes grátis Portugal</div>
+      <div class="ck-foot-line ck-foot-pay">
+        <span>Formas de pagamento</span>
+        <span class="pay-logo red">MB WAY</span>
+        <span class="pay-logo blue">MULTIBANCO</span>
+      </div>
+      <div class="ck-foot-company">Panini Portugal Lda · Exemplo de morada comercial<br>NIPC: 500 000 000</div>
+    </div>
+  </section>
+
+  <!-- =========== AGUARDANDO =========== -->
+  <section class="screen waiting-screen" id="screen-waiting">
+    <div class="spinner"></div>
+    <h2 id="waitingTitle">A aguardar pagamento</h2>
+    <p id="waitingText">Confirma o pagamento no teu app MB WAY.</p>
+
+    <div class="mb-reference-card hidden" id="mbRefCard">
+      <div class="title">Dados Multibanco</div>
+      <div class="mb-ref-row"><span class="label">Entidade</span><span class="value" id="mbEntity">—</span></div>
+      <div class="mb-ref-row"><span class="label">Referência</span><span class="value" id="mbReference">—</span></div>
+      <div class="mb-ref-row"><span class="label">Valor</span><span class="value" id="mbAmount">—</span></div>
+      <div class="mb-ref-row"><span class="label">Válido até</span><span class="value" id="mbExpires">—</span></div>
+    </div>
+  </section>
+
+  <section class="screen result-screen" id="screen-success">
+    <div class="result-icon success">✓</div>
+    <h2>Pagamento confirmado!</h2>
+    <p>Encomenda registada. Vais receber em 3 a 5 dias úteis.</p>
+    <a class="btn-primary" href="/">Voltar à loja</a>
+  </section>
+
+  <section class="screen result-screen" id="screen-failure">
+    <div class="result-icon failure">✕</div>
+    <h2>Pagamento não foi concluído</h2>
+    <p id="failureMsg">Ocorreu um problema ao processar o pagamento. Tenta novamente.</p>
+    <button class="btn-primary" id="btnRetry">Tentar novamente</button>
+  </section>
+
+</div>
+
+<script src="/checkout.js"></script>
+</body>
+</html>

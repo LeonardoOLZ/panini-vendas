@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 700" font-family="system-ui, sans-serif">
+  <defs>
+    <linearGradient id="boxOrange" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff7a1a"/>
+      <stop offset="1" stop-color="#e85a00"/>
+    </linearGradient>
+    <linearGradient id="albumGold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f8d96a"/>
+      <stop offset="1" stop-color="#d9a423"/>
+    </linearGradient>
+    <linearGradient id="lid" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3251c4"/>
+      <stop offset=".15" stop-color="#a8a4d8"/>
+      <stop offset=".3" stop-color="#ffd24d"/>
+      <stop offset=".45" stop-color="#22c55e"/>
+      <stop offset=".6" stop-color="#ec4899"/>
+      <stop offset=".75" stop-color="#f97316"/>
+      <stop offset=".9" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#a855f7"/>
+    </linearGradient>
+    <radialGradient id="floor" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#000" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="700" fill="#fafafa"/>
+  <g transform="translate(40 40)">
+    <text x="0" y="0" font-size="62" font-weight="900" fill="#1a1a1a" letter-spacing="-2">26</text>
+    <text x="0" y="20" font-size="13" font-weight="800" fill="#1a1a1a" letter-spacing="1">FIFA</text>
+    <text x="0" y="38" font-size="13" font-weight="800" fill="#1a1a1a" letter-spacing="1">WORLD CUP</text>
+    <text x="0" y="56" font-size="13" font-weight="800" fill="#1a1a1a" letter-spacing="1">2026</text>
+  </g>
+  <ellipse cx="400" cy="600" rx="320" ry="30" fill="url(#floor)"/>
+  <g transform="translate(420 160) rotate(8)">
+    <rect x="0" y="0" width="280" height="350" fill="url(#albumGold)" stroke="#b88a18" stroke-width="2" rx="3"/>
+    <circle cx="40" cy="40" r="32" fill="#ec4899" opacity=".85"/>
+    <circle cx="240" cy="60" r="28" fill="#22c55e" opacity=".85"/>
+    <circle cx="50" cy="310" r="26" fill="#3b82f6" opacity=".85"/>
+    <circle cx="240" cy="310" r="30" fill="#f59e0b" opacity=".85"/>
+    <g transform="translate(140 175)" text-anchor="middle">
+      <text y="-30" font-size="78" font-weight="900" fill="#1a1a1a">26</text>
+      <text y="-2" font-size="14" font-weight="900" fill="#1a1a1a">FIFA</text>
+      <text y="20" font-size="14" font-weight="900" fill="#1a1a1a">WORLD CUP</text>
+      <text y="42" font-size="14" font-weight="900" fill="#1a1a1a">2026</text>
+    </g>
+    <text x="265" y="335" text-anchor="end" font-size="13" font-weight="800" fill="#b03020">PANINI</text>
+  </g>
+  <g transform="translate(110 290)">
+    <path d="M0 50 L380 50 L380 250 L0 250 Z" fill="url(#boxOrange)"/>
+    <path d="M30 60 L350 60 L340 75 L40 75 Z" fill="#7a2c00" opacity=".4"/>
+    <text x="20" y="200" font-size="44" font-weight="900" fill="#fff" opacity=".85"
+          font-style="italic" letter-spacing="-1">WE ARE 26</text>
+  </g>
+  <g transform="translate(150 90) skewX(-6)">
+    <rect x="0" y="0" width="360" height="240" fill="url(#lid)" stroke="#222" stroke-width="1.5" rx="4"/>
+    <g transform="translate(180 105)" text-anchor="middle">
+      <rect x="-50" y="-50" width="100" height="100" fill="#fff" opacity=".15" rx="6"/>
+      <text y="-8" font-size="48" font-weight="900" fill="#1a1a1a">26</text>
+      <text y="20" font-size="12" font-weight="900" fill="#1a1a1a">FIFA WORLD CUP</text>
+      <text y="36" font-size="11" font-weight="900" fill="#1a1a1a">2026</text>
+    </g>
+  </g>
+  <g transform="translate(560 460) rotate(-12)">
+    <rect width="80" height="105" fill="#f3eedc" stroke="#aaa" rx="2"/>
+    <rect width="80" height="105" fill="url(#lid)" opacity=".7"/>
+    <rect y="0" width="80" height="14" fill="#fff" opacity=".5"/>
+    <rect y="91" width="80" height="14" fill="#fff" opacity=".5"/>
+  </g>
+  <g transform="translate(620 490) rotate(8)">
+    <rect width="80" height="105" fill="#f3eedc" stroke="#aaa" rx="2"/>
+    <rect width="80" height="105" fill="url(#lid)" opacity=".7"/>
+    <rect y="0" width="80" height="14" fill="#fff" opacity=".5"/>
+    <rect y="91" width="80" height="14" fill="#fff" opacity=".5"/>
+  </g>
+  <g transform="translate(530 540) rotate(-3)">
+    <rect width="80" height="105" fill="#f3eedc" stroke="#aaa" rx="2"/>
+    <rect width="80" height="105" fill="url(#lid)" opacity=".7"/>
+    <rect y="0" width="80" height="14" fill="#fff" opacity=".5"/>
+    <rect y="91" width="80" height="14" fill="#fff" opacity=".5"/>
+  </g>
+</svg>

@@ -1,0 +1,17 @@
+{
+  "name": "panini-vendas",
+  "version": "1.0.0",
+  "description": "Landing Panini + Checkout MB WAY/Multibanco (WayMB) + UTMify + Dashboard de tracking",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
