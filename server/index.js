@@ -472,6 +472,13 @@ app.get('/index.html', serveTemplatedHtml('index.html'));
 app.get('/checkout', serveTemplatedHtml('checkout.html'));
 app.get('/checkout.html', serveTemplatedHtml('checkout.html'));
 
+// Funil paralelo: Roleta da Sorte (quiz + roleta -> checkout)
+// Sistema independente da landing principal — mesmo backend, página separada.
+app.get('/roleta', serveTemplatedHtml('roleta.html'));
+app.get('/roleta.html', serveTemplatedHtml('roleta.html'));
+app.get('/checkout-roleta', serveTemplatedHtml('checkout-roleta.html'));
+app.get('/checkout-roleta.html', serveTemplatedHtml('checkout-roleta.html'));
+
 
 app.listen(PORT, () => {
   console.log('Panini-vendas a correr na porta ' + PORT + ' (' + (IS_PROD ? 'prod' : 'dev') + ')');

