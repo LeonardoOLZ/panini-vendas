@@ -3,7 +3,7 @@
 .env.local
 .env.production
 
-# === DependÃªncias ===
+# === Dependências ===
 node_modules/
 
 # === Dados em runtime (gerados localmente / no servidor) ===
@@ -32,6 +32,3 @@ desktop.ini
 # === Builds / temp ===
 .cache/
 tmp/
-
-# Uploads de logo/hero (gerenciados via dashboard)
-public/uploads/

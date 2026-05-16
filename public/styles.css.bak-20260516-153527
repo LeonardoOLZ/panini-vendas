@@ -355,39 +355,3 @@ img { max-width: 100%; display: block; }
 .result-icon.failure { background: #b3261e; }
 .result-screen h2 { font-size: 20px; margin: 0 0 6px; }
 .result-screen p { color: #555; font-size: 14px; margin: 0 0 22px; }
-
-/* === LOGO COMO IMAGEM (sobrescreve quando hÃ¡ upload) === */
-.topbar-logo.topbar-logo-img {
-  background: transparent;
-  border: 0;
-  padding: 0;
-  margin-bottom: 12px;
-}
-.topbar-logo.topbar-logo-img img {
-  max-height: 48px;
-  max-width: 200px;
-  display: block;
-}
-
-.ck-logo.ck-logo-img {
-  background: transparent;
-  border: 0;
-  padding: 0;
-}
-.ck-logo.ck-logo-img img {
-  max-height: 40px;
-  max-width: 180px;
-  display: block;
-}
-
-.footer-logo.footer-logo-img {
-  background: transparent;
-  border: 0;
-  padding: 0;
-  margin-bottom: 18px;
-}
-.footer-logo.footer-logo-img img {
-  max-height: 36px;
-  max-width: 150px;
-  display: block;
-}
