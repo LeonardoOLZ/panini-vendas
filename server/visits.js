@@ -223,8 +223,59 @@ function dashboardSummary({ from, to } = {}) {
   };
 }
 
+// ==========================================================
+// Utilizadores ativos (última janela de tempo)
+// ==========================================================
+function activeUsers({ windowMs = 5 * 60 * 1000 } = {}) {
+  const now = Date.now();
+  const since = now - windowMs;
+  const recent = rows.filter(r => r.ts >= since);
+  const visitors = {};
+  for (const r of recent) {
+    if (!r.visitorId) continue;
+    const v = visitors[r.visitorId] = visitors[r.visitorId] || {
+      visitorId: r.visitorId,
+      page: null,
+      lastEvent: null,
+      lastTs: 0,
+      firstTs: r.ts,
+      utm: null,
+      events: 0,
+      ip: null,
+      userAgent: null,
+    };
+    v.events++;
+    if (r.ts < v.firstTs) v.firstTs = r.ts;
+    if (r.ts > v.lastTs) {
+      v.lastTs = r.ts;
+      v.lastEvent = r.event;
+      v.page = r.page || v.page;
+      v.utm = r.utm || v.utm;
+      v.ip = r.ip || v.ip;
+      v.userAgent = r.userAgent || v.userAgent;
+    }
+  }
+  const all = Object.values(visitors).sort((a, b) => b.lastTs - a.lastTs);
+  const roleta  = all.filter(v => v.page === 'roleta');
+  const landing = all.filter(v => v.page !== 'roleta');
+  return {
+    windowMs,
+    generatedAt: now,
+    total: all.length,
+    byPage: {
+      roleta: roleta.length,
+      landing: landing.length,
+    },
+    visitors: {
+      roleta: roleta.slice(0, 50),
+      landing: landing.slice(0, 50),
+    },
+  };
+}
+
+
 function recent(limit = 100) {
   return rows.slice(-limit).reverse();
 }
 
-module.exports = { record, dashboardSummary, recent };
+module.exports = { record, dashboardSummary, recent, activeUsers };

@@ -232,6 +232,10 @@ td.right{text-align:right}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
       Atividade
     </div>
+    <div class="nav-item" data-nav="active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/><path d="M16 3.13a4 4 0 010 7.75"/><path d="M21 21v-2a4 4 0 00-3-3.87"/></svg>
+      Utilizadores ativos
+    </div>
     <div class="nav-item" data-nav="appearance">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
       Aparência
@@ -414,6 +418,50 @@ td.right{text-align:right}
       </div>
     </section>
 
+    <!-- ===== SECTION: ACTIVE USERS ===== -->
+    <section class="section" data-section="active">
+      <div class="row r-3">
+        <div class="kpi" style="border-left:3px solid var(--c-primary)">
+          <div class="kpi-head"><span class="kpi-label">Online em /roleta</span><span class="live-dot"></span></div>
+          <div class="kpi-value accent" id="auRoletaCount">0</div>
+          <div class="kpi-sub">últimos 5 min</div>
+        </div>
+        <div class="kpi" style="border-left:3px solid var(--c-accent)">
+          <div class="kpi-head"><span class="kpi-label">Online em landing</span><span class="live-dot"></span></div>
+          <div class="kpi-value" style="color:var(--c-accent)" id="auLandingCount">0</div>
+          <div class="kpi-sub">últimos 5 min</div>
+        </div>
+        <div class="kpi" style="border-left:3px solid var(--c-success)">
+          <div class="kpi-head"><span class="kpi-label">Total ativos</span><span class="live-dot"></span></div>
+          <div class="kpi-value success" id="auTotalCount">0</div>
+          <div class="kpi-sub">utilizadores únicos</div>
+        </div>
+      </div>
+
+      <div class="row r-2">
+        <div class="card">
+          <div class="card-head">
+            <h3 class="card-title">🎯 /roleta · ao vivo</h3>
+            <span style="font-size:11px;color:var(--c-text-3)">atualiza a cada 10s</span>
+          </div>
+          <table>
+            <thead><tr><th>Visitor</th><th>Etapa atual</th><th>Fonte</th><th class="num">Há</th></tr></thead>
+            <tbody id="tblActiveRoleta"><tr><td colspan="4" class="empty">Sem utilizadores ativos</td></tr></tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3 class="card-title">🏪 Landing principal · ao vivo</h3>
+            <span style="font-size:11px;color:var(--c-text-3)">atualiza a cada 10s</span>
+          </div>
+          <table>
+            <thead><tr><th>Visitor</th><th>Página/Etapa</th><th>Fonte</th><th class="num">Há</th></tr></thead>
+            <tbody id="tblActiveLanding"><tr><td colspan="4" class="empty">Sem utilizadores ativos</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
     <!-- ===== SECTION: APPEARANCE ===== -->
     <section class="section" data-section="appearance">
       <div class="card">
@@ -481,7 +529,7 @@ document.querySelectorAll('[data-range]').forEach(b=>{
 function setSection(name){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.nav===name));
   document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.dataset.section===name));
-  const titles={overview:'Visão geral',funnel:'Funil roleta',orders:'Pedidos',traffic:'Tráfego e UTMs',activity:'Atividade ao vivo',appearance:'Aparência'};
+  const titles={overview:'Visão geral',funnel:'Funil roleta',orders:'Pedidos',traffic:'Tráfego e UTMs',activity:'Atividade ao vivo',active:'Utilizadores ativos',appearance:'Aparência'};
   $('sectionTitle').textContent=titles[name]||'Painel';
 }
 document.querySelectorAll('[data-nav]').forEach(el=>{
@@ -675,6 +723,50 @@ function renderStatus(d){
   chartStatus=new Chart($('chartStatus'),{type:'doughnut',data:{labels,datasets:[{data:counts,backgroundColor:colors,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:8,font:{size:11}}}}}});
 }
 
+async function loadActiveUsers(){
+  if(!token)return;
+  try{
+    const r=await fetch('/api/admin/active-users?window=5',{headers:{'x-admin-token':token}});
+    if(!r.ok)return;
+    const d=await r.json();
+    renderActiveUsers(d);
+  }catch(e){}
+}
+
+function renderActiveUsers(d){
+  if(!d)return;
+  if($('auRoletaCount'))$('auRoletaCount').textContent=fmtNum(d.byPage&&d.byPage.roleta||0);
+  if($('auLandingCount'))$('auLandingCount').textContent=fmtNum(d.byPage&&d.byPage.landing||0);
+  if($('auTotalCount'))$('auTotalCount').textContent=fmtNum(d.total||0);
+
+  const stageLabel={
+    'visit':'Acabou de entrar','quiz_started':'Quiz iniciado','quiz_answer':'A responder o quiz','quiz_completed':'Quiz completo',
+    'email_captured':'Email captado','wheel_spin':'A girar roleta','roleta_won':'Ganhou 90% off','enter_store_click':'A entrar na loja',
+    'store_opened':'Na loja','add_to_cart':'Adicionou ao carrinho','cart_checkout_click':'A clicar checkout',
+    'roleta_claim_click':'A reclamar desconto','checkout_started':'Checkout iniciado','checkout_step_1':'Checkout step 1',
+    'checkout_step_2':'Checkout step 2','order_created':'Criou pedido','order_paid':'Pagou'
+  };
+
+  function renderRow(v){
+    const vid=(v.visitorId||'').slice(-6);
+    const stage=stageLabel[v.lastEvent]||v.lastEvent||'—';
+    const src=(v.utm&&v.utm.utm_source)||'directo';
+    const ago=relativeTime(v.lastTs);
+    return '<tr><td class="mono">'+escapeHtml(vid)+'</td><td>'+escapeHtml(stage)+'</td><td>'+escapeHtml(src)+'</td><td class="right" style="color:var(--c-text-2);font-size:11px">'+ago+'</td></tr>';
+  }
+
+  const rTb=$('tblActiveRoleta');
+  if(rTb){
+    const list=(d.visitors&&d.visitors.roleta)||[];
+    rTb.innerHTML=list.length?list.map(renderRow).join(''):'<tr><td colspan="4" class="empty">Sem utilizadores ativos</td></tr>';
+  }
+  const lTb=$('tblActiveLanding');
+  if(lTb){
+    const list=(d.visitors&&d.visitors.landing)||[];
+    lTb.innerHTML=list.length?list.map(renderRow).join(''):'<tr><td colspan="4" class="empty">Sem utilizadores ativos</td></tr>';
+  }
+}
+
 async function loadAppearance(){
   if(!token)return;
   try{
@@ -704,7 +796,9 @@ function bootstrap(){
   showApp();
   reload();
   loadAppearance();
+  loadActiveUsers();
   setInterval(reload,30000);
+  setInterval(loadActiveUsers,10000);
 }
 bootstrap();
 </script>

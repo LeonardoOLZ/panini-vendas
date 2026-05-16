@@ -344,6 +344,10 @@ app.get('/api/admin/dashboard', requireAdmin, (req, res) => {
   const totalRevenue = stats.filter(s => s.status === 'COMPLETED').reduce((sum, s) => sum + Number(s.total || 0), 0);
   res.json({ ...summary, revenue: { total: totalRevenue, currency:'EUR' }, statsByStatus: stats, orders });
 });
+app.get('/api/admin/active-users', requireAdmin, (req, res) => {
+  const windowMin = Math.min(60, Math.max(1, Number(req.query.window) || 5));
+  res.json(visits.activeUsers({ windowMs: windowMin * 60 * 1000 }));
+});
 app.get('/api/admin/visits-recent', requireAdmin, (req, res) => {
   const limit = Math.min(Number(req.query.limit) || 100, 500);
   res.json(visits.recent(limit));
