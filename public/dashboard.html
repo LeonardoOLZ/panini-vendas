@@ -1,655 +1,712 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-PT">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard — Panini Vendas</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23ffd400'/%3E%3Ctext x='16' y='22' font-size='16' font-weight='900' text-anchor='middle' fill='%23a3000c' font-family='system-ui'%3EP%3C/text%3E%3C/svg%3E" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #f5f7fb; color: #1a1a1a; -webkit-font-smoothing: antialiased;
-    }
-    .topbar {
-      background: #1f2540; color: #fff; padding: 14px 20px;
-      display: flex; align-items: center; gap: 14px;
-      box-shadow: 0 2px 4px rgba(0,0,0,.1);
-    }
-    .topbar .logo {
-      background: #ffd400; color: #a3000c; font-style: italic; font-weight: 900;
-      padding: 4px 12px; border-radius: 4px; border: 2px solid #a3000c; font-size: 18px;
-    }
-    .topbar h1 { font-size: 18px; margin: 0; font-weight: 700; }
-    .topbar .spacer { flex: 1; }
-    .topbar select, .topbar button {
-      background: #2a3151; color: #fff; border: 1px solid #3b446e;
-      padding: 8px 12px; border-radius: 6px; font-size: 13px; cursor: pointer;
-    }
-    .topbar button.refresh { background: #ffd400; color: #1a1a1a; border-color: #ffd400; font-weight: 700; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Panini Admin · Dashboard</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23ffd400'/%3E%3Ctext x='16' y='22' font-size='16' font-weight='900' text-anchor='middle' fill='%23a3000c' font-family='system-ui'%3EP%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --c-primary:#c62828;
+  --c-primary-soft:#fee7e7;
+  --c-accent:#0a3d91;
+  --c-success:#16a34a;
+  --c-success-soft:#e8f5ed;
+  --c-warning:#f59e0b;
+  --c-warning-soft:#fff4e0;
+  --c-danger:#b91c1c;
+  --c-danger-soft:#fce8e8;
+  --c-bg:#f7f8fa;
+  --c-surface:#ffffff;
+  --c-border:#e6e8ec;
+  --c-text:#1a1f2e;
+  --c-text-2:#5b6478;
+  --c-text-3:#9aa1ad;
+  --radius:8px;
+  --radius-lg:12px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+  background:var(--c-bg);color:var(--c-text);
+  font-size:14px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;cursor:pointer;border:0;background:transparent;color:inherit}
+a{color:inherit;text-decoration:none}
+input{font-family:inherit;font-size:14px;outline:none}
 
-    .container { max-width: 1280px; margin: 0 auto; padding: 24px 20px 40px; }
+/* ===== GATE (login) ===== */
+.gate{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.gate-card{background:#fff;border:1px solid var(--c-border);border-radius:var(--radius-lg);padding:32px;max-width:380px;width:100%;text-align:center}
+.gate-logo{width:48px;height:48px;background:#ffd400;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-weight:900;color:#a3000c;font-size:22px;margin-bottom:16px;letter-spacing:-1px}
+.gate-card h1{margin:0 0 6px;font-size:20px;font-weight:600}
+.gate-card p{margin:0 0 22px;color:var(--c-text-2);font-size:13px}
+.gate-card input{width:100%;padding:10px 12px;border:1px solid var(--c-border);border-radius:var(--radius);transition:border .15s,box-shadow .15s;margin-bottom:12px}
+.gate-card input:focus{border-color:var(--c-primary);box-shadow:0 0 0 3px var(--c-primary-soft)}
+.gate-card button{width:100%;padding:11px 14px;background:var(--c-primary);color:#fff;border-radius:var(--radius);font-weight:600;font-size:14px;transition:background .15s}
+.gate-card button:hover{background:#a32020}
 
-    .gate {
-      max-width: 420px; margin: 100px auto; background: #fff; border-radius: 10px;
-      padding: 28px; box-shadow: 0 4px 20px rgba(0,0,0,.08); text-align: center;
-    }
-    .gate h2 { margin: 0 0 8px; }
-    .gate p { color: #555; margin: 0 0 18px; font-size: 14px; }
-    .gate input {
-      width: 100%; padding: 12px; border: 1px solid #d0d0d0; border-radius: 6px;
-      font-size: 14px; margin-bottom: 12px;
-    }
-    .gate button {
-      width: 100%; background: #1f2540; color: #fff; border: 0; border-radius: 6px;
-      padding: 12px; font-size: 14px; font-weight: 700; cursor: pointer;
-    }
+/* ===== APP LAYOUT ===== */
+.app{display:none;min-height:100vh;grid-template-columns:200px 1fr}
+.app.show{display:grid}
 
-    /* KPI cards */
-    .kpis {
-      display: grid; gap: 16px;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      margin-bottom: 20px;
-    }
-    .kpi {
-      background: #fff; border-radius: 10px; padding: 18px;
-      box-shadow: 0 1px 3px rgba(0,0,0,.06);
-    }
-    .kpi .label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: .5px; font-weight: 700; }
-    .kpi .value { font-size: 28px; font-weight: 800; margin-top: 6px; line-height: 1; }
-    .kpi .sub   { font-size: 12px; color: #999; margin-top: 4px; }
-    .kpi.green .value { color: #16a34a; }
-    .kpi.blue  .value { color: #2563eb; }
-    .kpi.orange .value { color: #ea580c; }
-    .kpi.purple .value { color: #7c3aed; }
+/* SIDEBAR */
+.sidebar{
+  background:var(--c-surface);
+  border-right:1px solid var(--c-border);
+  padding:18px 12px;
+  display:flex;flex-direction:column;
+  gap:2px;
+  position:sticky;top:0;height:100vh;
+}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 10px 16px;border-bottom:1px solid var(--c-border);margin-bottom:14px}
+.brand-mark{width:30px;height:30px;background:#ffd400;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#a3000c;font-size:15px;letter-spacing:-1px}
+.brand-text{font-size:14px;font-weight:600}
+.brand-sub{font-size:11px;color:var(--c-text-3);font-weight:400;letter-spacing:.5px;text-transform:uppercase}
 
-    /* Cards */
-    .grid {
-      display: grid; gap: 16px;
-      grid-template-columns: 1fr;
-      margin-bottom: 20px;
-    }
-    @media (min-width: 900px) {
-      .grid.two   { grid-template-columns: 2fr 1fr; }
-      .grid.three { grid-template-columns: 1fr 1fr 1fr; }
-    }
-    .card {
-      background: #fff; border-radius: 10px; padding: 18px;
-      box-shadow: 0 1px 3px rgba(0,0,0,.06);
-    }
-    .card h3 { margin: 0 0 12px; font-size: 15px; }
-    .card .chart-wrap { height: 280px; position: relative; }
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border-radius:var(--radius);
+  font-size:13.5px;color:var(--c-text-2);
+  transition:background .15s,color .15s;cursor:pointer;
+}
+.nav-item:hover{background:#f1f3f6;color:var(--c-text)}
+.nav-item.active{background:var(--c-primary-soft);color:var(--c-primary);font-weight:600}
+.nav-item svg{width:16px;height:16px;flex-shrink:0}
 
-    /* Funnel */
-    .funnel-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-    .funnel-label { width: 170px; font-size: 13px; color: #555; }
-    .funnel-bar-wrap { flex: 1; height: 22px; background: #f0f2f7; border-radius: 4px; overflow: hidden; }
-    .funnel-bar {
-      height: 100%; background: linear-gradient(90deg, #2563eb, #16a34a);
-      display: flex; align-items: center; padding: 0 8px;
-      color: #fff; font-size: 12px; font-weight: 700; min-width: 40px;
-      transition: width .6s cubic-bezier(.4,0,.2,1);
-    }
-    .funnel-num { min-width: 60px; text-align: right; font-weight: 700; font-size: 13px; }
+.sidebar-footer{margin-top:auto;padding-top:14px;border-top:1px solid var(--c-border)}
 
-    /* UTM tables */
-    .utm-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .utm-table th, .utm-table td { text-align: left; padding: 8px 6px; border-bottom: 1px solid #f0f0f0; }
-    .utm-table th { font-weight: 700; color: #666; text-transform: uppercase; font-size: 11px; letter-spacing: .5px; }
-    .utm-table td.num { text-align: right; font-weight: 700; }
-    .utm-table tr:last-child td { border-bottom: 0; }
+/* MAIN */
+.main{padding:24px 28px 40px;min-width:0}
+.main-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;gap:14px;flex-wrap:wrap}
+.main-title{font-size:20px;font-weight:600;margin:0;line-height:1.2}
+.main-sub{font-size:12px;color:var(--c-text-2);margin:3px 0 0}
+.live-dot{display:inline-block;width:6px;height:6px;background:var(--c-success);border-radius:50%;margin-right:6px;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-    /* Orders table */
-    .orders-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .orders-table th, .orders-table td { text-align: left; padding: 10px 8px; border-bottom: 1px solid #f0f0f0; }
-    .orders-table th { font-weight: 700; color: #666; text-transform: uppercase; font-size: 11px; letter-spacing: .5px; }
-    .orders-table td.num { text-align: right; font-weight: 700; }
-    .badge {
-      display: inline-block; padding: 3px 8px; border-radius: 12px;
-      font-size: 11px; font-weight: 700;
-    }
-    .badge.PENDING   { background: #fff7ed; color: #c2410c; }
-    .badge.COMPLETED { background: #f0fdf4; color: #15803d; }
-    .badge.DECLINED  { background: #fef2f2; color: #b91c1c; }
+.toolbar{display:flex;align-items:center;gap:10px}
+.range-pills{display:inline-flex;background:#fff;border:1px solid var(--c-border);border-radius:var(--radius);padding:3px;gap:2px}
+.range-pills button{padding:5px 11px;font-size:12.5px;border-radius:5px;font-weight:500;color:var(--c-text-2)}
+.range-pills button.active{background:var(--c-text);color:#fff}
+.btn-icon{padding:7px 9px;background:#fff;border:1px solid var(--c-border);border-radius:var(--radius);color:var(--c-text-2);transition:all .15s}
+.btn-icon:hover{background:#f1f3f6;color:var(--c-text)}
+.btn-icon svg{width:14px;height:14px;display:block}
 
-    .empty { color: #999; font-size: 13px; padding: 12px 0; text-align: center; }
-    .footer-note { color: #999; font-size: 12px; text-align: center; margin-top: 20px; }
-  </style>
+/* SECTIONS */
+.section{display:none}
+.section.active{display:block}
+
+/* KPI ROW */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.kpi{background:#fff;border:1px solid var(--c-border);border-radius:var(--radius);padding:14px 16px;transition:border .15s}
+.kpi:hover{border-color:var(--c-text-3)}
+.kpi-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.kpi-label{font-size:11px;color:var(--c-text-2);font-weight:600;letter-spacing:.4px;text-transform:uppercase}
+.kpi-delta{font-size:11px;font-weight:600;padding:2px 7px;border-radius:9999px}
+.kpi-delta.up{background:var(--c-success-soft);color:var(--c-success)}
+.kpi-delta.down{background:var(--c-danger-soft);color:var(--c-danger)}
+.kpi-value{font-size:24px;font-weight:600;line-height:1.1;color:var(--c-text)}
+.kpi-value.accent{color:var(--c-primary)}
+.kpi-value.success{color:var(--c-success)}
+.kpi-sub{font-size:11.5px;color:var(--c-text-3);margin-top:3px}
+
+/* GRID */
+.row{display:grid;gap:12px;margin-bottom:14px}
+.row.r-4060{grid-template-columns:1.4fr 1fr}
+.row.r-6040{grid-template-columns:1.6fr 1fr}
+.row.r-2{grid-template-columns:1fr 1fr}
+.row.r-3{grid-template-columns:1fr 1fr 1fr}
+@media (max-width:980px){.row.r-4060,.row.r-6040,.row.r-2,.row.r-3,.kpi-row{grid-template-columns:1fr}.app{grid-template-columns:1fr}.sidebar{position:relative;height:auto}}
+
+.card{background:#fff;border:1px solid var(--c-border);border-radius:var(--radius-lg);padding:16px 18px}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-title{font-size:14px;font-weight:600;margin:0}
+.card-action{font-size:12px;color:var(--c-primary);font-weight:500;cursor:pointer}
+
+/* FUNNEL */
+.funnel-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:12.5px}
+.funnel-row:last-child{margin-bottom:0}
+.funnel-label{width:160px;color:var(--c-text-2);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.funnel-bar-wrap{flex:1;height:20px;background:#f1f3f6;border-radius:4px;overflow:hidden;position:relative}
+.funnel-bar{height:100%;border-radius:4px;display:flex;align-items:center;padding:0 8px;color:#fff;font-size:11px;font-weight:600;min-width:24px;transition:width .4s ease}
+.funnel-num{width:60px;text-align:right;font-size:12px;color:var(--c-text-2)}
+.funnel-num strong{color:var(--c-text);font-weight:600}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead th{text-align:left;font-weight:500;font-size:11px;color:var(--c-text-2);letter-spacing:.4px;text-transform:uppercase;padding:8px 0;border-bottom:1px solid var(--c-border)}
+thead th.num{text-align:right}
+tbody td{padding:10px 0;border-bottom:1px solid var(--c-border)}
+tbody tr:last-child td{border-bottom:0}
+tbody td.num,tbody td.center{text-align:center}
+td.right{text-align:right}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px}
+.empty{color:var(--c-text-3);text-align:center;padding:18px 0;font-size:12.5px}
+
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:9999px}
+.badge.success{background:var(--c-success-soft);color:var(--c-success)}
+.badge.warning{background:var(--c-warning-soft);color:var(--c-warning)}
+.badge.danger{background:var(--c-danger-soft);color:var(--c-danger)}
+.badge.neutral{background:#f1f3f6;color:var(--c-text-2)}
+
+/* SOURCES */
+.src-list{display:flex;flex-direction:column;gap:10px}
+.src-row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px}
+.src-key{display:inline-flex;align-items:center;gap:8px;color:var(--c-text-2)}
+.src-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.src-val{font-weight:600}
+
+/* ACTIVITY */
+.activity{display:flex;flex-direction:column;gap:10px;font-size:12.5px}
+.activity-row{display:flex;gap:10px;align-items:flex-start}
+.activity-ts{color:var(--c-text-3);font-size:11px;width:42px;flex-shrink:0;padding-top:1px}
+.activity-msg{color:var(--c-text);line-height:1.4}
+.activity-msg strong{font-weight:600}
+.activity-msg .e-page{color:var(--c-primary)}
+.activity-msg .e-ok{color:var(--c-success)}
+
+/* SPARKLINE / CHART */
+.chart-wrap{position:relative;height:200px}
+.chart-wrap.sm{height:90px}
+
+/* UPLOAD CARDS */
+.upload-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
+.upload-card{border:1px dashed var(--c-border);border-radius:var(--radius);padding:18px;text-align:center}
+.upload-card img{max-width:100%;max-height:120px;margin:0 auto 10px;display:block}
+.upload-card label{display:inline-block;padding:7px 14px;background:var(--c-text);color:#fff;border-radius:var(--radius);font-size:12px;font-weight:500;cursor:pointer}
+.upload-card label input{display:none}
+.upload-status{font-size:11px;color:var(--c-text-2);margin-top:8px}
+
+.empty-state{padding:30px 16px;text-align:center;color:var(--c-text-3);font-size:13px}
+</style>
 </head>
 <body>
 
-<!-- ====== GATE (token) ====== -->
-<div id="gate" class="gate" style="display:none;">
-  <h2>Dashboard Panini</h2>
-  <p>Introduz o token de admin para entrar.</p>
-  <input id="tokenInput" type="password" placeholder="ADMIN_TOKEN" />
-  <button id="btnEnter">Entrar</button>
+<!-- ===== GATE ===== -->
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <div class="gate-logo">P</div>
+    <h1>Panini Admin</h1>
+    <p>Insere o teu token de acesso</p>
+    <input type="password" id="tokenInput" placeholder="ADMIN_TOKEN" autocomplete="off" />
+    <button id="btnEnter">Entrar</button>
+  </div>
 </div>
 
-<!-- ====== APP ====== -->
-<div id="app" style="display:none;">
-  <header class="topbar">
-    <span class="logo">PANINI</span>
-    <h1>Dashboard de vendas & tracking</h1>
-    <span class="spacer"></span>
-    <select id="rangeSelect">
-      <option value="1">Hoje</option>
-      <option value="7" selected>Últimos 7 dias</option>
-      <option value="30">Últimos 30 dias</option>
-      <option value="90">Últimos 90 dias</option>
-    </select>
-    <button class="refresh" id="btnRefresh">↻ Atualizar</button>
-    <button id="btnLogout">Sair</button>
-  </header>
+<!-- ===== APP ===== -->
+<div class="app" id="app">
 
-  <main class="container">
-
-    <!-- KPIs -->
-    <!-- ============== APARÃŠNCIA (logo + hero) ============== -->
-<style>
-  .appearance-section {
-    background: #fff;
-    border-radius: 10px;
-    padding: 24px;
-    margin-bottom: 24px;
-    box-shadow: 0 1px 3px rgba(0,0,0,.06);
-  }
-  .appearance-section h2 {
-    margin: 0 0 16px;
-    font-size: 18px;
-    font-weight: 700;
-  }
-  .appearance-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-  .appearance-card {
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    padding: 16px;
-    background: #fafafa;
-  }
-  .appearance-card h3 {
-    margin: 0 0 10px;
-    font-size: 14px;
-    font-weight: 700;
-    color: #374151;
-  }
-  .appearance-preview {
-    background: #fff;
-    border: 1px dashed #d1d5db;
-    border-radius: 6px;
-    padding: 16px;
-    min-height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 12px;
-  }
-  .appearance-preview img {
-    max-width: 100%;
-    max-height: 120px;
-    display: block;
-  }
-  .appearance-empty {
-    color: #9ca3af;
-    font-size: 13px;
-    font-style: italic;
-  }
-  .appearance-actions {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-  .btn-upload {
-    background: #1f2540;
-    color: #fff;
-    border: 0;
-    border-radius: 6px;
-    padding: 8px 14px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  .btn-upload:hover { background: #2a3151; }
-  .appearance-status {
-    font-size: 12px;
-    color: #6b7280;
-  }
-  .appearance-status.success { color: #16a34a; font-weight: 600; }
-  .appearance-status.error { color: #b91c1c; font-weight: 600; }
-  @media (max-width: 700px) {
-    .appearance-grid { grid-template-columns: 1fr; }
-  }
-</style>
-
-<section class="appearance-section">
-  <h2>AparÃªncia</h2>
-  <div class="appearance-grid">
-
-    <div class="appearance-card">
-      <h3>Logo (topbar + checkout)</h3>
-      <div class="appearance-preview" id="logoPreview">
-        <span class="appearance-empty">Nenhum logo (texto padrÃ£o)</span>
-      </div>
-      <div class="appearance-actions">
-        <input type="file" id="logoFile" accept="image/png,image/jpeg,image/webp,image/svg+xml" style="display:none">
-        <button class="btn-upload" onclick="document.getElementById('logoFile').click()">Escolher imagem</button>
-        <span class="appearance-status" id="logoStatus"></span>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">P</div>
+      <div>
+        <div class="brand-text">Panini</div>
+        <div class="brand-sub">Admin</div>
       </div>
     </div>
 
-    <div class="appearance-card">
-      <h3>Imagem do produto (LP â€” abaixo do header)</h3>
-      <div class="appearance-preview" id="heroPreview">
-        <span class="appearance-empty">Nenhuma imagem (placeholder padrÃ£o)</span>
+    <div class="nav-item active" data-nav="overview">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Visão geral
+    </div>
+    <div class="nav-item" data-nav="funnel">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      Funil roleta
+    </div>
+    <div class="nav-item" data-nav="orders">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      Pedidos
+    </div>
+    <div class="nav-item" data-nav="traffic">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Tráfego &amp; UTM
+    </div>
+    <div class="nav-item" data-nav="activity">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Atividade
+    </div>
+    <div class="nav-item" data-nav="appearance">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Aparência
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="nav-item" id="btnLogout">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sair
       </div>
-      <div class="appearance-actions">
-        <input type="file" id="heroFile" accept="image/png,image/jpeg,image/webp" style="display:none">
-        <button class="btn-upload" onclick="document.getElementById('heroFile').click()">Escolher imagem</button>
-        <span class="appearance-status" id="heroStatus"></span>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- Header -->
+    <div class="main-header">
+      <div>
+        <h1 class="main-title" id="sectionTitle">Visão geral</h1>
+        <p class="main-sub"><span class="live-dot"></span>Atualizado há <span id="freshness">—</span></p>
+      </div>
+      <div class="toolbar">
+        <div class="range-pills">
+          <button data-range="7">7d</button>
+          <button data-range="30" class="active">30d</button>
+          <button data-range="90">90d</button>
+        </div>
+        <button class="btn-icon" id="btnRefresh" title="Atualizar agora">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+        </button>
       </div>
     </div>
 
-  </div>
-</section>
-
-<script>
-  // AparÃªncia: carrega/upload logo + hero
-  (function() {
-    async function loadAppearance() {
-      try {
-        const r = await fetch('/api/admin/settings', { headers: { 'x-admin-token': token } });
-        if (!r.ok) return;
-        const s = await r.json();
-        renderLogo(s);
-        renderHero(s);
-      } catch (e) { /* silent */ }
-    }
-
-    function renderLogo(s) {
-      const prev = document.getElementById('logoPreview');
-      if (s.logoPath) {
-        const url = s.logoPath + '?v=' + (s.logoVersion || Date.now());
-        prev.innerHTML = '<img src="' + url + '" alt="Logo">';
-      } else {
-        prev.innerHTML = '<span class="appearance-empty">Nenhum logo (texto padrÃ£o)</span>';
-      }
-    }
-
-    function renderHero(s) {
-      const prev = document.getElementById('heroPreview');
-      if (s.heroPath) {
-        const url = s.heroPath + '?v=' + (s.heroVersion || Date.now());
-        prev.innerHTML = '<img src="' + url + '" alt="Hero">';
-      } else {
-        prev.innerHTML = '<span class="appearance-empty">Nenhuma imagem (placeholder padrÃ£o)</span>';
-      }
-    }
-
-    async function uploadFile(file, endpoint, statusEl, onSuccess) {
-      statusEl.textContent = 'A enviar...';
-      statusEl.className = 'appearance-status';
-      const fd = new FormData();
-      fd.append('file', file);
-      try {
-        const r = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'x-admin-token': token },
-          body: fd,
-        });
-        const data = await r.json();
-        if (!r.ok) throw new Error(data.error || 'Erro no upload');
-        statusEl.textContent = 'OK';
-        statusEl.className = 'appearance-status success';
-        onSuccess(data.settings);
-        setTimeout(() => { statusEl.textContent = ''; }, 3000);
-      } catch (err) {
-        statusEl.textContent = err.message || 'Erro';
-        statusEl.className = 'appearance-status error';
-      }
-    }
-
-    document.getElementById('logoFile').addEventListener('change', function (e) {
-      const f = e.target.files[0];
-      if (!f) return;
-      uploadFile(f, '/api/admin/upload-logo', document.getElementById('logoStatus'), renderLogo);
-    });
-
-    document.getElementById('heroFile').addEventListener('change', function (e) {
-      const f = e.target.files[0];
-      if (!f) return;
-      uploadFile(f, '/api/admin/upload-hero', document.getElementById('heroStatus'), renderHero);
-    });
-
-    // Hook na inicializaÃ§Ã£o da dashboard
-    const _origReload = window.reload;
-    if (typeof _origReload === 'function') {
-      // chamar uma vez apÃ³s bootstrap
-      setTimeout(loadAppearance, 200);
-    } else {
-      setTimeout(loadAppearance, 500);
-    }
-  })();
-</script>
-
-    <div class="kpis">
-      <div class="kpi blue">
-        <div class="label">Visitas</div>
-        <div class="value" id="kVisits">—</div>
-        <div class="sub" id="kVisitsSub">—</div>
+    <!-- ===== SECTION: OVERVIEW ===== -->
+    <section class="section active" data-section="overview">
+      <div class="kpi-row">
+        <div class="kpi">
+          <div class="kpi-head"><span class="kpi-label">Visitas</span><span class="kpi-delta up" id="kpiDeltaVisits">—</span></div>
+          <div class="kpi-value" id="kVisits">—</div>
+          <div class="kpi-sub" id="kVisitsSub">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-head"><span class="kpi-label">Visitas /roleta</span><span class="kpi-delta up" id="kpiDeltaRoleta">—</span></div>
+          <div class="kpi-value accent" id="kRoleta">—</div>
+          <div class="kpi-sub" id="kRoletaSub">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-head"><span class="kpi-label">Pedidos pagos</span><span class="kpi-delta up" id="kpiDeltaPaid">—</span></div>
+          <div class="kpi-value success" id="kPaid">—</div>
+          <div class="kpi-sub" id="kPaidSub">CR —</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-head"><span class="kpi-label">Receita</span><span class="kpi-delta up" id="kpiDeltaRevenue">—</span></div>
+          <div class="kpi-value" id="kRevenue">—</div>
+          <div class="kpi-sub" id="kRevenueSub">Tkt méd. —</div>
+        </div>
       </div>
-      <div class="kpi purple">
-        <div class="label">Visitantes únicos</div>
-        <div class="value" id="kUnique">—</div>
-        <div class="sub">por visitorId</div>
-      </div>
-      <div class="kpi orange">
-        <div class="label">Checkouts iniciados</div>
-        <div class="value" id="kCheckouts">—</div>
-        <div class="sub" id="kCheckoutsSub">taxa de conversão</div>
-      </div>
-      <div class="kpi green">
-        <div class="label">Receita confirmada</div>
-        <div class="value" id="kRevenue">—</div>
-        <div class="sub">apenas pedidos COMPLETED</div>
-      </div>
-    </div>
 
-    <!-- série temporal + funnel -->
-    <div class="grid two">
+      <div class="row r-4060">
+        <div class="card">
+          <div class="card-head">
+            <h3 class="card-title">Funil da roleta</h3>
+            <span style="font-size:11px;color:var(--c-text-3)">11 etapas</span>
+          </div>
+          <div id="funnelRoleta"></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="card">
+            <div class="card-head"><h3 class="card-title">Conversões por dia</h3></div>
+            <div class="chart-wrap sm"><canvas id="chartTimeline"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h3 class="card-title">Top fontes</h3></div>
+            <div class="src-list" id="topSources"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row r-6040">
+        <div class="card">
+          <div class="card-head">
+            <h3 class="card-title">Pedidos recentes</h3>
+            <span class="card-action" data-nav-to="orders">Ver todos →</span>
+          </div>
+          <table>
+            <thead><tr><th>Pedido</th><th>Cliente</th><th class="num">Valor</th><th class="num">Estado</th></tr></thead>
+            <tbody id="tblOrdersOverview"><tr><td colspan="4" class="empty">A carregar…</td></tr></tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h3 class="card-title">Atividade ao vivo</h3>
+            <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--c-success)"><span class="live-dot"></span>Live</span>
+          </div>
+          <div class="activity" id="activityFeed"><div class="empty">A carregar…</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECTION: FUNNEL ===== -->
+    <section class="section" data-section="funnel">
+      <div class="row r-2">
+        <div class="card">
+          <div class="card-head"><h3 class="card-title">Funil da landing principal</h3></div>
+          <div id="funnelMain"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3 class="card-title">Funil completo da roleta</h3></div>
+          <div id="funnelRoletaFull"></div>
+        </div>
+      </div>
+
+      <div class="row r-3">
+        <div class="card kpi-mini" id="kpiQuiz">
+          <div class="kpi-label">Quiz iniciados</div>
+          <div class="kpi-value" id="mQuizStarted" style="margin-top:6px">—</div>
+        </div>
+        <div class="card kpi-mini">
+          <div class="kpi-label">Emails captados</div>
+          <div class="kpi-value accent" id="mEmailCaptured" style="margin-top:6px">—</div>
+        </div>
+        <div class="card kpi-mini">
+          <div class="kpi-label">90% off ganhos</div>
+          <div class="kpi-value success" id="mRoletaWon" style="margin-top:6px">—</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECTION: ORDERS ===== -->
+    <section class="section" data-section="orders">
       <div class="card">
-        <h3>Visitas vs. Checkouts iniciados</h3>
-        <div class="chart-wrap"><canvas id="chartTimeline"></canvas></div>
-      </div>
-      <div class="card">
-        <h3>Funil de conversão (landing principal)</h3>
-        <div id="funnel"></div>
-      </div>
-    </div>
-
-    <!-- Funil específico da /roleta -->
-    <div class="grid two">
-      <div class="card">
-        <h3>🎯 Funil da Roleta (/roleta)</h3>
-        <div id="funnelRoleta"></div>
-      </div>
-      <div class="card">
-        <h3>📊 KPIs Roleta</h3>
-        <div id="roletaKpis" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px"></div>
-      </div>
-    </div>
-
-    <!-- UTM breakdown -->
-    <div class="grid three">
-      <div class="card">
-        <h3>UTM Source</h3>
-        <table class="utm-table" id="tblSource">
-          <thead><tr><th>Source</th><th class="num">Visitas</th></tr></thead>
-          <tbody></tbody>
+        <div class="card-head">
+          <h3 class="card-title">Todos os pedidos</h3>
+        </div>
+        <table>
+          <thead><tr><th>ID</th><th>Data</th><th>Cliente</th><th>Método</th><th class="num">Valor</th><th class="num">Estado</th></tr></thead>
+          <tbody id="tblOrdersFull"><tr><td colspan="6" class="empty">A carregar…</td></tr></tbody>
         </table>
       </div>
-      <div class="card">
-        <h3>UTM Medium</h3>
-        <table class="utm-table" id="tblMedium">
-          <thead><tr><th>Medium</th><th class="num">Visitas</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <div class="card">
-        <h3>UTM Campaign</h3>
-        <table class="utm-table" id="tblCampaign">
-          <thead><tr><th>Campaign</th><th class="num">Visitas</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
+    </section>
 
-    <!-- referrers + status -->
-    <div class="grid two">
-      <div class="card">
-        <h3>Top referrers</h3>
-        <table class="utm-table" id="tblReferrers">
-          <thead><tr><th>Origem</th><th class="num">Visitas</th></tr></thead>
-          <tbody></tbody>
-        </table>
+    <!-- ===== SECTION: TRAFFIC & UTM ===== -->
+    <section class="section" data-section="traffic">
+      <div class="row r-3">
+        <div class="card">
+          <div class="card-head"><h3 class="card-title">UTM Source</h3></div>
+          <table id="tblSource"><thead><tr><th>Source</th><th class="num">Visitas</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3 class="card-title">UTM Medium</h3></div>
+          <table id="tblMedium"><thead><tr><th>Medium</th><th class="num">Visitas</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3 class="card-title">UTM Campaign</h3></div>
+          <table id="tblCampaign"><thead><tr><th>Campaign</th><th class="num">Visitas</th></tr></thead><tbody></tbody></table>
+        </div>
       </div>
-      <div class="card">
-        <h3>Pedidos por status</h3>
-        <div class="chart-wrap" style="height:240px;"><canvas id="chartStatus"></canvas></div>
+      <div class="row r-2">
+        <div class="card">
+          <div class="card-head"><h3 class="card-title">Referrers</h3></div>
+          <table id="tblReferrers"><thead><tr><th>Origem</th><th class="num">Visitas</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3 class="card-title">Status dos pedidos</h3></div>
+          <div class="chart-wrap"><canvas id="chartStatus"></canvas></div>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <!-- orders -->
-    <div class="card">
-      <h3>Últimos pedidos</h3>
-      <table class="orders-table">
-        <thead>
-          <tr>
-            <th>Data</th><th>Cliente</th><th>Método</th><th>Status</th>
-            <th>UTM source</th><th>Campaign</th><th class="num">Valor</th>
-          </tr>
-        </thead>
-        <tbody id="tblOrders"></tbody>
-      </table>
-    </div>
+    <!-- ===== SECTION: ACTIVITY ===== -->
+    <section class="section" data-section="activity">
+      <div class="card">
+        <div class="card-head">
+          <h3 class="card-title">Eventos recentes</h3>
+          <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--c-success)"><span class="live-dot"></span>Live</span>
+        </div>
+        <div class="activity" id="activityFeedFull"><div class="empty">A carregar…</div></div>
+      </div>
+    </section>
 
-    <p class="footer-note">Dashboard servida localmente · dados em <code>data/visits.json</code> e <code>data/transactions.json</code></p>
+    <!-- ===== SECTION: APPEARANCE ===== -->
+    <section class="section" data-section="appearance">
+      <div class="card">
+        <div class="card-head">
+          <h3 class="card-title">Logo e hero da landing principal</h3>
+        </div>
+        <div class="upload-grid">
+          <div class="upload-card">
+            <div style="font-size:12px;color:var(--c-text-2);margin-bottom:8px;font-weight:600">Logo</div>
+            <img id="prevLogo" src="" alt="" onerror="this.style.display='none'" />
+            <label>Carregar logo<input type="file" id="fileLogo" accept="image/*" /></label>
+            <div class="upload-status" id="logoStatus"></div>
+          </div>
+          <div class="upload-card">
+            <div style="font-size:12px;color:var(--c-text-2);margin-bottom:8px;font-weight:600">Hero</div>
+            <img id="prevHero" src="" alt="" onerror="this.style.display='none'" />
+            <label>Carregar hero<input type="file" id="fileHero" accept="image/*" /></label>
+            <div class="upload-status" id="heroStatus"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 </div>
 
 <script>
-  // Token gate
-  const TOKEN_KEY = 'panini_admin_token';
-  let token = localStorage.getItem(TOKEN_KEY) || new URLSearchParams(location.search).get('token');
+/* ============================================================
+   PANINI ADMIN — Dashboard v2
+   ============================================================ */
+const TOKEN_KEY='panini_admin_token';
+let token=localStorage.getItem(TOKEN_KEY)||new URLSearchParams(location.search).get('token');
+let rangeDays=30;
+let chartTimeline=null,chartStatus=null;
+let lastFetchAt=0;
 
-  function showGate() {
-    document.getElementById('gate').style.display = 'block';
-    document.getElementById('app').style.display = 'none';
-  }
-  function showApp() {
-    document.getElementById('gate').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-  }
-  document.getElementById('btnEnter').addEventListener('click', () => {
-    const v = document.getElementById('tokenInput').value.trim();
-    if (!v) return;
-    token = v;
-    localStorage.setItem(TOKEN_KEY, v);
-    bootstrap();
-  });
-  document.getElementById('btnLogout').addEventListener('click', () => {
-    localStorage.removeItem(TOKEN_KEY); token = null; showGate();
-  });
+const $=id=>document.getElementById(id);
+const fmtPct=(n,d)=>!d?'0%':((n/d)*100).toFixed(1)+'%';
+const fmtEUR=v=>new Intl.NumberFormat('pt-PT',{style:'currency',currency:'EUR'}).format(v||0);
+const fmtNum=v=>(v||0).toLocaleString('pt-PT');
+const escapeHtml=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
-  // Helpers
-  function fmtEUR(v) { return new Intl.NumberFormat('pt-PT', { style:'currency', currency:'EUR' }).format(v); }
-  function fmtPct(num, denom) { if (!denom) return '0%'; return ((num/denom)*100).toFixed(1) + '%'; }
-  function fmtDateTime(ts) {
-    return new Date(ts).toLocaleString('pt-PT', { dateStyle: 'short', timeStyle: 'short' });
-  }
+function showGate(){$('gate').style.display='flex';$('app').classList.remove('show')}
+function showApp(){$('gate').style.display='none';$('app').classList.add('show')}
 
-  let chartTimeline = null;
-  let chartStatus = null;
+$('btnEnter').addEventListener('click',()=>{
+  const v=$('tokenInput').value.trim();
+  if(!v)return;
+  token=v;localStorage.setItem(TOKEN_KEY,v);bootstrap();
+});
+$('tokenInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('btnEnter').click()});
+$('btnLogout').addEventListener('click',()=>{localStorage.removeItem(TOKEN_KEY);token=null;showGate()});
 
-  async function fetchDashboard(rangeDays) {
-    const to = Date.now();
-    const from = to - rangeDays * 24 * 60 * 60 * 1000;
-    const r = await fetch(`/api/admin/dashboard?from=${from}&to=${to}`, {
-      headers: { 'x-admin-token': token },
-    });
-    if (r.status === 401 || r.status === 404) { showGate(); throw new Error('unauthorized'); }
-    return r.json();
-  }
-
-  function renderKpis(d) {
-    document.getElementById('kVisits').textContent   = d.totals.visits.toLocaleString('pt-PT');
-    document.getElementById('kVisitsSub').textContent = d.totals.uniqueVisitors + ' únicos';
-    document.getElementById('kUnique').textContent   = d.totals.uniqueVisitors.toLocaleString('pt-PT');
-    document.getElementById('kCheckouts').textContent = d.totals.checkoutStarted.toLocaleString('pt-PT');
-    document.getElementById('kCheckoutsSub').textContent = 'taxa: ' + fmtPct(d.totals.checkoutStarted, d.totals.visits);
-    document.getElementById('kRevenue').textContent  = fmtEUR(d.revenue.total || 0);
-  }
-
-  function renderTimeline(d) {
-    const labels = d.series.map(s => s.date);
-    const visits = d.series.map(s => s.visits);
-    const checkouts = d.series.map(s => s.checkouts);
-    if (chartTimeline) chartTimeline.destroy();
-    chartTimeline = new Chart(document.getElementById('chartTimeline'), {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [
-          { label: 'Visitas', data: visits, borderColor: '#2563eb', backgroundColor: '#2563eb22', fill: true, tension: .35, borderWidth: 2 },
-          { label: 'Checkouts iniciados', data: checkouts, borderColor: '#ea580c', backgroundColor: '#ea580c22', fill: true, tension: .35, borderWidth: 2 },
-        ],
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { position: 'bottom' } },
-        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
-      },
-    });
-  }
-
-  function renderFunnel(d) {
-    const max = Math.max(...d.funnel.map(f => f.count), 1);
-    const html = d.funnel.map(f => `
-      <div class="funnel-row">
-        <div class="funnel-label">${f.stage}</div>
-        <div class="funnel-bar-wrap">
-          <div class="funnel-bar" style="width:${(f.count/max)*100}%">${f.count}</div>
-        </div>
-        <div class="funnel-num">${fmtPct(f.count, max)}</div>
-      </div>
-    `).join('');
-    document.getElementById('funnel').innerHTML = html;
-  }
-
-  function renderFunnelRoleta(d) {
-    const el = document.getElementById('funnelRoleta');
-    if (!el || !d.funnelRoleta) return;
-    const max = Math.max(...d.funnelRoleta.map(f => f.count), 1);
-    const html = d.funnelRoleta.map((f, i) => {
-      const color = i === 0 ? '#c62828' : i === d.funnelRoleta.length - 1 ? '#16a34a' : '#0a3d91';
-      return `
-        <div class="funnel-row">
-          <div class="funnel-label" style="font-size:12px">${f.stage}</div>
-          <div class="funnel-bar-wrap">
-            <div class="funnel-bar" style="width:${(f.count/max)*100}%;background:${color}">${f.count}</div>
-          </div>
-          <div class="funnel-num">${fmtPct(f.count, max)}</div>
-        </div>
-      `;
-    }).join('');
-    el.innerHTML = html;
-  }
-
-  function renderRoletaKpis(d) {
-    const el = document.getElementById('roletaKpis');
-    if (!el || !d.totals) return;
-    const t = d.totals;
-    const items = [
-      { label: 'Visitas /roleta', value: t.roletaVisits || 0, color: '#c62828' },
-      { label: 'Únicos', value: t.roletaUniqueVisitors || 0, color: '#0a3d91' },
-      { label: 'Quiz iniciados', value: t.quizStarted || 0, color: '#0a3d91' },
-      { label: 'Quiz completos', value: t.quizCompleted || 0, color: '#0a3d91' },
-      { label: 'Emails captados', value: t.emailCaptured || 0, color: '#0a3d91' },
-      { label: 'Roleta girada', value: t.wheelSpun || 0, color: '#0a3d91' },
-      { label: '90% off ganho', value: t.roletaWon || 0, color: '#16a34a' },
-      { label: 'Adicionados ao carrinho', value: t.addedToCart || 0, color: '#0a3d91' },
-      { label: 'Cliques checkout', value: t.cartCheckout || 0, color: '#ea580c' },
-      { label: 'Pedidos criados', value: t.orderCreated || 0, color: '#ea580c' },
-      { label: 'Pagamentos confirmados', value: t.orderPaid || 0, color: '#16a34a' },
-      { label: 'Taxa quiz→ganho', value: fmtPct(t.roletaWon || 0, t.quizStarted || 1), color: '#0a3d91' },
-    ];
-    el.innerHTML = items.map(i => `
-      <div style="padding:10px 12px;background:#f7f9fc;border-radius:6px;border-left:3px solid ${i.color}">
-        <div style="font-size:11px;color:#777;letter-spacing:.3px;text-transform:uppercase">${i.label}</div>
-        <div style="font-size:18px;font-weight:800;color:${i.color}">${i.value}</div>
-      </div>
-    `).join('');
-  }
-
-  function renderUtmTable(elId, rows) {
-    const tb = document.querySelector('#' + elId + ' tbody');
-    if (!rows.length) { tb.innerHTML = '<tr><td colspan="2" class="empty">Sem dados</td></tr>'; return; }
-    tb.innerHTML = rows.map(r => `<tr><td>${escapeHtml(r.key)}</td><td class="num">${r.count}</td></tr>`).join('');
-  }
-
-  function renderStatusChart(d) {
-    const stats = (d.statsByStatus || []).filter(s => s && s.status);
-    const labels = stats.map(s => s.status);
-    const counts = stats.map(s => s.count);
-    const colors = labels.map(l => l === 'COMPLETED' ? '#16a34a' : l === 'DECLINED' ? '#b91c1c' : '#f59e0b');
-    if (chartStatus) chartStatus.destroy();
-    if (!labels.length) {
-      const ctx = document.getElementById('chartStatus').getContext('2d');
-      ctx.clearRect(0,0,1000,1000);
-      return;
-    }
-    chartStatus = new Chart(document.getElementById('chartStatus'), {
-      type: 'doughnut',
-      data: { labels, datasets: [{ data: counts, backgroundColor: colors }] },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } },
-    });
-  }
-
-  function renderOrders(d) {
-    const tb = document.getElementById('tblOrders');
-    const orders = d.orders || [];
-    if (!orders.length) { tb.innerHTML = '<tr><td colspan="7" class="empty">Sem pedidos</td></tr>'; return; }
-    tb.innerHTML = orders.map(o => `
-      <tr>
-        <td>${fmtDateTime(o.created_at)}</td>
-        <td>${escapeHtml(o.payer_name || '—')}<br><small style="color:#999">${escapeHtml(o.payer_email || '')}</small></td>
-        <td>${escapeHtml(o.method || '')}</td>
-        <td><span class="badge ${o.status}">${o.status}</span></td>
-        <td>${escapeHtml(o.utm_source || '—')}</td>
-        <td>${escapeHtml(o.utm_campaign || '—')}</td>
-        <td class="num">${fmtEUR(o.amount || 0)}</td>
-      </tr>
-    `).join('');
-  }
-
-  function escapeHtml(s) {
-    return String(s == null ? '' : s)
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  async function reload() {
-    const days = Number(document.getElementById('rangeSelect').value);
-    try {
-      const d = await fetchDashboard(days);
-      renderKpis(d);
-      renderTimeline(d);
-      renderFunnel(d);
-      renderFunnelRoleta(d);
-      renderRoletaKpis(d);
-      renderUtmTable('tblSource',    d.utm.source);
-      renderUtmTable('tblMedium',    d.utm.medium);
-      renderUtmTable('tblCampaign',  d.utm.campaign);
-      renderUtmTable('tblReferrers', d.referrers);
-      renderStatusChart(d);
-      renderOrders(d);
-    } catch (e) { /* silent */ }
-  }
-
-  document.getElementById('btnRefresh').addEventListener('click', reload);
-  document.getElementById('rangeSelect').addEventListener('change', reload);
-
-  function bootstrap() {
-    if (!token) { showGate(); return; }
-    showApp();
+/* Range pills */
+document.querySelectorAll('[data-range]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('[data-range]').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    rangeDays=Number(b.dataset.range);
     reload();
-    // auto-refresh a cada 30s
-    setInterval(reload, 30_000);
-  }
-  bootstrap();
-</script>
+  });
+});
 
+/* Nav switching */
+function setSection(name){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.nav===name));
+  document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.dataset.section===name));
+  const titles={overview:'Visão geral',funnel:'Funil roleta',orders:'Pedidos',traffic:'Tráfego e UTMs',activity:'Atividade ao vivo',appearance:'Aparência'};
+  $('sectionTitle').textContent=titles[name]||'Painel';
+}
+document.querySelectorAll('[data-nav]').forEach(el=>{
+  if(el.id==='btnLogout')return;
+  el.addEventListener('click',()=>setSection(el.dataset.nav));
+});
+document.querySelectorAll('[data-nav-to]').forEach(el=>{
+  el.addEventListener('click',()=>setSection(el.dataset.navTo));
+});
+
+$('btnRefresh').addEventListener('click',reload);
+
+async function api(path){
+  const r=await fetch(path,{headers:{'x-admin-token':token}});
+  if(r.status===401||r.status===404){showGate();throw new Error('unauthorized')}
+  return r.json();
+}
+
+async function reload(){
+  if(!token){showGate();return}
+  try{
+    const to=Date.now(),from=to-rangeDays*86400000;
+    const [d,visits]=await Promise.all([
+      api(`/api/admin/dashboard?from=${from}&to=${to}`),
+      api(`/api/admin/visits-recent?limit=30`),
+    ]);
+    renderAll(d,visits);
+    lastFetchAt=Date.now();
+    updateFreshness();
+  }catch(e){console.warn('reload err',e)}
+}
+
+function updateFreshness(){
+  if(!lastFetchAt){$('freshness').textContent='—';return}
+  const sec=Math.floor((Date.now()-lastFetchAt)/1000);
+  if(sec<60)$('freshness').textContent=sec+'s';
+  else $('freshness').textContent=Math.floor(sec/60)+'m';
+}
+setInterval(updateFreshness,1000);
+
+function renderAll(d,recentVisits){
+  const t=d.totals||{};
+  $('kVisits').textContent=fmtNum(t.visits);
+  $('kVisitsSub').textContent=fmtNum(t.uniqueVisitors)+' unicos';
+  $('kRoleta').textContent=fmtNum(t.roletaVisits||0);
+  $('kRoletaSub').textContent=fmtPct(t.roletaVisits||0,t.visits||1)+' do total';
+  $('kPaid').textContent=fmtNum(t.orderPaid||0);
+  $('kPaidSub').textContent='CR '+fmtPct(t.orderPaid||0,t.visits||1);
+  $('kRevenue').textContent=fmtEUR((d.revenue&&d.revenue.total)||0);
+  const tkt=(t.orderPaid&&d.revenue&&d.revenue.total)?(d.revenue.total/t.orderPaid):0;
+  $('kRevenueSub').textContent='Tkt med. '+fmtEUR(tkt);
+  ['kpiDeltaVisits','kpiDeltaRoleta','kpiDeltaPaid','kpiDeltaRevenue'].forEach(id=>{$(id).style.display='none'});
+
+  const roletaColors=['#c62828','#c62828','#c62828','#c62828','#c62828','#16a34a','#0a3d91','#0a3d91','#0a3d91','#0a3d91','#16a34a'];
+  renderFunnel('funnelRoleta',d.funnelRoleta||[],roletaColors);
+  renderFunnel('funnelRoletaFull',d.funnelRoleta||[],roletaColors);
+  renderFunnel('funnelMain',d.funnel||[],['#0a3d91','#0a3d91','#0a3d91','#0a3d91']);
+
+  if($('mQuizStarted'))$('mQuizStarted').textContent=fmtNum(t.quizStarted||0);
+  if($('mEmailCaptured'))$('mEmailCaptured').textContent=fmtNum(t.emailCaptured||0);
+  if($('mRoletaWon'))$('mRoletaWon').textContent=fmtNum(t.roletaWon||0);
+
+  renderTimeline(d.series||[]);
+  renderTopSources((d.utm&&d.utm.source)||[],t.visits||1);
+  renderUtmTable('tblSource',(d.utm&&d.utm.source)||[]);
+  renderUtmTable('tblMedium',(d.utm&&d.utm.medium)||[]);
+  renderUtmTable('tblCampaign',(d.utm&&d.utm.campaign)||[]);
+  renderUtmTable('tblReferrers',d.referrers||[]);
+  renderOrders('tblOrdersOverview',(d.orders||[]).slice(0,4));
+  renderOrders('tblOrdersFull',d.orders||[]);
+  const events=eventsFromVisits(recentVisits||[]);
+  renderActivity('activityFeed',events.slice(0,8));
+  renderActivity('activityFeedFull',events);
+  renderStatus(d);
+}
+
+function renderFunnel(id,arr,colors){
+  const el=$(id);if(!el)return;
+  if(!arr.length){el.innerHTML='<div class="empty">Sem dados ainda</div>';return}
+  const max=Math.max(...arr.map(f=>f.count),1);
+  el.innerHTML=arr.map((f,i)=>{
+    const c=(colors&&colors[i])||'#c62828';
+    const pct=(f.count/max)*100;
+    return '<div class="funnel-row"><div class="funnel-label">'+escapeHtml(f.stage)+'</div>'+
+      '<div class="funnel-bar-wrap"><div class="funnel-bar" style="width:'+pct+'%;background:'+c+'">'+(f.count>0?f.count:'')+'</div></div>'+
+      '<div class="funnel-num"><strong>'+fmtNum(f.count)+'</strong> · '+fmtPct(f.count,max)+'</div></div>';
+  }).join('');
+}
+
+function renderTimeline(series){
+  const labels=series.map(s=>s.date.slice(5));
+  const visits=series.map(s=>s.visits||0);
+  const roleta=series.map(s=>s.roleta||0);
+  const paid=series.map(s=>s.paid||0);
+  if(chartTimeline)chartTimeline.destroy();
+  if(!labels.length)return;
+  chartTimeline=new Chart($('chartTimeline'),{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'Visitas',data:visits,borderColor:'#94a3b8',backgroundColor:'rgba(148,163,184,0.13)',fill:true,tension:.35,borderWidth:1.5,pointRadius:0},
+      {label:'/roleta',data:roleta,borderColor:'#c62828',backgroundColor:'rgba(198,40,40,0.13)',fill:true,tension:.35,borderWidth:2,pointRadius:0},
+      {label:'Pagos',data:paid,borderColor:'#16a34a',fill:false,tension:.35,borderWidth:2,pointRadius:0},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'bottom',labels:{boxWidth:8,boxHeight:8,font:{size:11}}}},
+      scales:{y:{beginAtZero:true,ticks:{precision:0,font:{size:10}}},x:{ticks:{font:{size:10},maxRotation:0}}}}
+  });
+}
+
+function renderTopSources(list,totalVisits){
+  const colors={facebook:'#1877f2',tiktok:'#000',google:'#34a853',instagram:'#e1306c','(direct)':'#9aa1ad'};
+  const el=$('topSources');if(!el)return;
+  if(!list.length){el.innerHTML='<div class="empty">Sem dados</div>';return}
+  el.innerHTML=list.slice(0,5).map(r=>{
+    const c=colors[r.key]||'#5b6478';
+    return '<div class="src-row"><span class="src-key"><span class="src-dot" style="background:'+c+'"></span>'+escapeHtml(r.key||'(direct)')+'</span><span class="src-val">'+fmtPct(r.count,totalVisits)+'</span></div>';
+  }).join('');
+}
+
+function renderUtmTable(id,rows){
+  const tb=document.querySelector('#'+id+' tbody');if(!tb)return;
+  if(!rows.length){tb.innerHTML='<tr><td colspan="2" class="empty">Sem dados</td></tr>';return}
+  tb.innerHTML=rows.map(r=>'<tr><td>'+escapeHtml(r.key)+'</td><td class="right">'+fmtNum(r.count)+'</td></tr>').join('');
+}
+
+function renderOrders(id,orders){
+  const tb=$(id);if(!tb)return;
+  if(!orders.length){tb.innerHTML='<tr><td colspan="6" class="empty">Sem pedidos ainda</td></tr>';return}
+  const isFull=id==='tblOrdersFull';
+  tb.innerHTML=orders.map(o=>{
+    const cls=o.status==='COMPLETED'?'success':o.status==='PENDING'?'warning':o.status==='DECLINED'?'danger':'neutral';
+    const lbl=o.status==='COMPLETED'?'Pago':o.status==='PENDING'?'Pendente':o.status==='DECLINED'?'Recusado':o.status;
+    const idShort=(o.id||'').slice(0,8);
+    const cliente=o.payer_name||(o.anonymous?'Anonimo':'—');
+    const m=(o.method||'').toUpperCase();
+    const dt=o.created_at?new Date(o.created_at).toLocaleString('pt-PT',{dateStyle:'short',timeStyle:'short'}):'—';
+    if(isFull){
+      return '<tr><td class="mono">'+escapeHtml(idShort)+'</td><td>'+escapeHtml(dt)+'</td><td>'+escapeHtml(cliente)+'</td><td>'+escapeHtml(m)+'</td><td class="right" style="font-weight:600">'+fmtEUR(o.amount)+'</td><td class="right"><span class="badge '+cls+'">'+lbl+'</span></td></tr>';
+    }
+    return '<tr><td class="mono">'+escapeHtml(idShort)+'</td><td>'+escapeHtml(cliente)+'</td><td class="right" style="font-weight:600">'+fmtEUR(o.amount)+'</td><td class="right"><span class="badge '+cls+'">'+lbl+'</span></td></tr>';
+  }).join('');
+}
+
+function eventsFromVisits(visits){
+  const out=[];
+  for(const v of visits){
+    const ago=relativeTime(v.ts);
+    let msg='';
+    switch(v.event){
+      case 'visit':msg=v.page==='roleta'?'Visita <span class="e-page">/roleta</span> · '+(v.utm&&v.utm.utm_source||'directo'):'Visita landing · '+(v.utm&&v.utm.utm_source||'directo');break;
+      case 'quiz_started':msg='Quiz iniciado';break;
+      case 'quiz_completed':msg='Quiz completo';break;
+      case 'email_captured':msg='Email captado: <strong>'+escapeHtml((v.meta&&v.meta.email)||'')+'</strong>';break;
+      case 'wheel_spin':msg='Roleta girada';break;
+      case 'roleta_won':msg='<span class="e-ok">Ganhou 90% off</span>';break;
+      case 'store_opened':msg='Entrou na loja';break;
+      case 'add_to_cart':msg='Adicionou ao carrinho';break;
+      case 'cart_checkout_click':msg='Clicou checkout';break;
+      case 'order_created':msg='Pedido criado ('+(v.meta&&v.meta.method||'').toUpperCase()+')';break;
+      case 'order_paid':msg='<span class="e-ok">Pago '+fmtEUR((v.meta&&v.meta.amount)||0)+'</span>';break;
+      case 'order_declined':msg='Pedido recusado';break;
+      case 'checkout_started':msg='Iniciou checkout (landing)';break;
+      default:msg=escapeHtml(v.event);
+    }
+    out.push({ago,msg,ts:v.ts});
+  }
+  return out;
+}
+
+function relativeTime(ts){
+  const s=Math.floor((Date.now()-ts)/1000);
+  if(s<60)return s+'s';
+  if(s<3600)return Math.floor(s/60)+'m';
+  if(s<86400)return Math.floor(s/3600)+'h';
+  return Math.floor(s/86400)+'d';
+}
+
+function renderActivity(id,events){
+  const el=$(id);if(!el)return;
+  if(!events.length){el.innerHTML='<div class="empty">Sem eventos ainda</div>';return}
+  el.innerHTML=events.map(e=>'<div class="activity-row"><span class="activity-ts">ha '+e.ago+'</span><span class="activity-msg">'+e.msg+'</span></div>').join('');
+}
+
+function renderStatus(d){
+  const stats=(d.statsByStatus||[]).filter(s=>s&&s.status);
+  if(chartStatus)chartStatus.destroy();
+  if(!stats.length)return;
+  const labels=stats.map(s=>s.status);
+  const counts=stats.map(s=>s.count);
+  const colors=labels.map(l=>l==='COMPLETED'?'#16a34a':l==='DECLINED'?'#b91c1c':'#f59e0b');
+  chartStatus=new Chart($('chartStatus'),{type:'doughnut',data:{labels,datasets:[{data:counts,backgroundColor:colors,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:8,font:{size:11}}}}}});
+}
+
+async function loadAppearance(){
+  if(!token)return;
+  try{
+    const r=await fetch('/api/admin/settings',{headers:{'x-admin-token':token}});
+    if(!r.ok)return;
+    const s=await r.json();
+    if(s&&s.logo)$('prevLogo').src=s.logo+'?t='+Date.now();
+    if(s&&s.hero)$('prevHero').src=s.hero+'?t='+Date.now();
+  }catch(e){}
+}
+async function upload(file,endpoint,statusEl){
+  const fd=new FormData();fd.append('file',file);
+  statusEl.textContent='A carregar…';
+  try{
+    const r=await fetch(endpoint,{method:'POST',headers:{'x-admin-token':token},body:fd});
+    const data=await r.json();
+    if(!r.ok)throw new Error(data.error||'Erro');
+    statusEl.textContent='✓ Atualizado';
+    loadAppearance();
+  }catch(e){statusEl.textContent='✕ '+e.message}
+}
+$('fileLogo').addEventListener('change',e=>{const f=e.target.files[0];if(f)upload(f,'/api/admin/upload-logo',$('logoStatus'))});
+$('fileHero').addEventListener('change',e=>{const f=e.target.files[0];if(f)upload(f,'/api/admin/upload-hero',$('heroStatus'))});
+
+function bootstrap(){
+  if(!token){showGate();return}
+  showApp();
+  reload();
+  loadAppearance();
+  setInterval(reload,30000);
+}
+bootstrap();
+</script>
 </body>
 </html>
