@@ -365,8 +365,20 @@
         <div class="chart-wrap"><canvas id="chartTimeline"></canvas></div>
       </div>
       <div class="card">
-        <h3>Funil de conversão</h3>
+        <h3>Funil de conversão (landing principal)</h3>
         <div id="funnel"></div>
+      </div>
+    </div>
+
+    <!-- Funil específico da /roleta -->
+    <div class="grid two">
+      <div class="card">
+        <h3>🎯 Funil da Roleta (/roleta)</h3>
+        <div id="funnelRoleta"></div>
+      </div>
+      <div class="card">
+        <h3>📊 KPIs Roleta</h3>
+        <div id="roletaKpis" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px"></div>
       </div>
     </div>
 
@@ -517,6 +529,51 @@
     document.getElementById('funnel').innerHTML = html;
   }
 
+  function renderFunnelRoleta(d) {
+    const el = document.getElementById('funnelRoleta');
+    if (!el || !d.funnelRoleta) return;
+    const max = Math.max(...d.funnelRoleta.map(f => f.count), 1);
+    const html = d.funnelRoleta.map((f, i) => {
+      const color = i === 0 ? '#c62828' : i === d.funnelRoleta.length - 1 ? '#16a34a' : '#0a3d91';
+      return `
+        <div class="funnel-row">
+          <div class="funnel-label" style="font-size:12px">${f.stage}</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:${(f.count/max)*100}%;background:${color}">${f.count}</div>
+          </div>
+          <div class="funnel-num">${fmtPct(f.count, max)}</div>
+        </div>
+      `;
+    }).join('');
+    el.innerHTML = html;
+  }
+
+  function renderRoletaKpis(d) {
+    const el = document.getElementById('roletaKpis');
+    if (!el || !d.totals) return;
+    const t = d.totals;
+    const items = [
+      { label: 'Visitas /roleta', value: t.roletaVisits || 0, color: '#c62828' },
+      { label: 'Únicos', value: t.roletaUniqueVisitors || 0, color: '#0a3d91' },
+      { label: 'Quiz iniciados', value: t.quizStarted || 0, color: '#0a3d91' },
+      { label: 'Quiz completos', value: t.quizCompleted || 0, color: '#0a3d91' },
+      { label: 'Emails captados', value: t.emailCaptured || 0, color: '#0a3d91' },
+      { label: 'Roleta girada', value: t.wheelSpun || 0, color: '#0a3d91' },
+      { label: '90% off ganho', value: t.roletaWon || 0, color: '#16a34a' },
+      { label: 'Adicionados ao carrinho', value: t.addedToCart || 0, color: '#0a3d91' },
+      { label: 'Cliques checkout', value: t.cartCheckout || 0, color: '#ea580c' },
+      { label: 'Pedidos criados', value: t.orderCreated || 0, color: '#ea580c' },
+      { label: 'Pagamentos confirmados', value: t.orderPaid || 0, color: '#16a34a' },
+      { label: 'Taxa quiz→ganho', value: fmtPct(t.roletaWon || 0, t.quizStarted || 1), color: '#0a3d91' },
+    ];
+    el.innerHTML = items.map(i => `
+      <div style="padding:10px 12px;background:#f7f9fc;border-radius:6px;border-left:3px solid ${i.color}">
+        <div style="font-size:11px;color:#777;letter-spacing:.3px;text-transform:uppercase">${i.label}</div>
+        <div style="font-size:18px;font-weight:800;color:${i.color}">${i.value}</div>
+      </div>
+    `).join('');
+  }
+
   function renderUtmTable(elId, rows) {
     const tb = document.querySelector('#' + elId + ' tbody');
     if (!rows.length) { tb.innerHTML = '<tr><td colspan="2" class="empty">Sem dados</td></tr>'; return; }
@@ -570,6 +627,8 @@
       renderKpis(d);
       renderTimeline(d);
       renderFunnel(d);
+      renderFunnelRoleta(d);
+      renderRoletaKpis(d);
       renderUtmTable('tblSource',    d.utm.source);
       renderUtmTable('tblMedium',    d.utm.medium);
       renderUtmTable('tblCampaign',  d.utm.campaign);

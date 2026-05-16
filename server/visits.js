@@ -111,7 +111,21 @@ function dashboardSummary({ from, to } = {}) {
   const step1    = filtered.filter(r => r.event === 'checkout_step_1');
   const step2    = filtered.filter(r => r.event === 'checkout_step_2');
 
+  // ----- Eventos do funil /roleta -----
+  const roletaVisits  = visits.filter(r => r.page === 'roleta');
+  const quizStarted   = filtered.filter(r => r.event === 'quiz_started');
+  const quizCompleted = filtered.filter(r => r.event === 'quiz_completed');
+  const emailCaptured = filtered.filter(r => r.event === 'email_captured');
+  const wheelSpun     = filtered.filter(r => r.event === 'wheel_spin');
+  const roletaWon     = filtered.filter(r => r.event === 'roleta_won');
+  const storeOpened   = filtered.filter(r => r.event === 'store_opened');
+  const addedToCart   = filtered.filter(r => r.event === 'add_to_cart');
+  const cartCheckout  = filtered.filter(r => r.event === 'cart_checkout_click');
+  const orderCreated  = filtered.filter(r => r.event === 'order_created');
+  const orderPaid     = filtered.filter(r => r.event === 'order_paid');
+
   const uniqueVisitors = new Set(visits.map(r => r.visitorId).filter(Boolean)).size;
+  const uniqueRoletaVisitors = new Set(roletaVisits.map(r => r.visitorId).filter(Boolean)).size;
 
   // série temporal por dia
   const series = {};
@@ -119,9 +133,14 @@ function dashboardSummary({ from, to } = {}) {
     const day = new Date(r.ts);
     day.setHours(0, 0, 0, 0);
     const key = day.toISOString().slice(0, 10);
-    if (!series[key]) series[key] = { date: key, visits: 0, checkouts: 0 };
-    if (r.event === 'visit') series[key].visits++;
+    if (!series[key]) series[key] = { date: key, visits: 0, checkouts: 0, roleta: 0, roletaWon: 0, paid: 0 };
+    if (r.event === 'visit') {
+      series[key].visits++;
+      if (r.page === 'roleta') series[key].roleta++;
+    }
     if (r.event === 'checkout_started') series[key].checkouts++;
+    if (r.event === 'roleta_won') series[key].roletaWon++;
+    if (r.event === 'order_paid') series[key].paid++;
   }
   const seriesArr = Object.values(series).sort((a, b) => a.date.localeCompare(b.date));
 
@@ -160,12 +179,38 @@ function dashboardSummary({ from, to } = {}) {
       checkoutStarted: starts.length,
       step1Completed: step1.length,
       step2Completed: step2.length,
+      // ----- Roleta -----
+      roletaVisits: roletaVisits.length,
+      roletaUniqueVisitors: uniqueRoletaVisitors,
+      quizStarted: quizStarted.length,
+      quizCompleted: quizCompleted.length,
+      emailCaptured: emailCaptured.length,
+      wheelSpun: wheelSpun.length,
+      roletaWon: roletaWon.length,
+      storeOpened: storeOpened.length,
+      addedToCart: addedToCart.length,
+      cartCheckout: cartCheckout.length,
+      orderCreated: orderCreated.length,
+      orderPaid: orderPaid.length,
     },
     funnel: [
       { stage: 'Visitou landing', count: visits.length },
       { stage: 'Iniciou checkout', count: starts.length },
       { stage: 'Concluiu dados (1)', count: step1.length },
       { stage: 'Concluiu entrega (2)', count: step2.length },
+    ],
+    funnelRoleta: [
+      { stage: 'Entrou em /roleta', count: roletaVisits.length },
+      { stage: 'Comecou o quiz', count: quizStarted.length },
+      { stage: 'Terminou as 5 perguntas', count: quizCompleted.length },
+      { stage: 'Deixou o email', count: emailCaptured.length },
+      { stage: 'Girou a roleta', count: wheelSpun.length },
+      { stage: 'Ganhou 90% off', count: roletaWon.length },
+      { stage: 'Entrou na loja', count: storeOpened.length },
+      { stage: 'Adicionou ao carrinho', count: addedToCart.length },
+      { stage: 'Clicou checkout', count: cartCheckout.length },
+      { stage: 'Pedido criado', count: orderCreated.length },
+      { stage: 'Pagamento confirmado', count: orderPaid.length },
     ],
     series: seriesArr,
     utm: {
