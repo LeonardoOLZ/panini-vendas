@@ -13,10 +13,10 @@
 
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init','1485033180084660');fbq('track','PageView');
-fbq('track','InitiateCheckout');
+fbq('init','1548176733554598');fbq('track','PageView');
+// InitiateCheckout disparado quando o cart estiver carregado (mais abaixo)
 </script>
-<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1485033180084660&ev=PageView&noscript=1"/></noscript>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1548176733554598&ev=PageView&noscript=1"/></noscript>
 
 <style>
 *,*::before,*::after{box-sizing:border-box}
@@ -972,7 +972,16 @@ function startPolling(id){
       if (d.status === 'COMPLETED'){
         stopPolling();
         if (typeof fbq === 'function'){
-          fbq('track','Purchase',{ value: calcTotals().total, currency:'EUR' });
+          const t = calcTotals();
+          fbq('track','Purchase',{
+            content_ids: state.cart.map(c => c.id),
+            content_name: state.cart.map(c => c.name).join(' + ').slice(0, 200),
+            content_type: 'product',
+            contents: state.cart.map(c => ({ id: c.id, quantity: c.qty, item_price: c.priceFinal })),
+            num_items: t.itemCount,
+            value: t.total,
+            currency: 'EUR',
+          }, { eventID: 'purchase_' + state.txId });
         }
         try{ sessionStorage.removeItem('roleta_cart_v1'); }catch(e){}
         showOverlay('screen-success');
@@ -1000,6 +1009,21 @@ document.getElementById('btnRetry').addEventListener('click', () => {
 loadCart();
 renderCart();
 renderUpsells();
+
+// Disparar InitiateCheckout do Pixel com dedup + dados do cart
+const _checkoutEventId = getCheckoutEventId();
+if (state.cart.length && typeof fbq === 'function'){
+  const t = calcTotals();
+  fbq('track','InitiateCheckout',{
+    content_ids: state.cart.map(c => c.id),
+    content_name: state.cart.map(c => c.name).join(' + ').slice(0, 200),
+    content_type: 'product',
+    contents: state.cart.map(c => ({ id: c.id, quantity: c.qty, item_price: c.priceFinal })),
+    num_items: t.itemCount,
+    value: t.total,
+    currency: 'EUR',
+  }, { eventID: _checkoutEventId });
+}
 
 trackEvt('checkout_view', { items: state.cart.length });
 </script>
